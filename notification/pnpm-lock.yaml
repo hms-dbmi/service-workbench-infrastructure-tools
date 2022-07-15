@@ -1,0 +1,44 @@
+lockfileVersion: 5.4
+
+specifiers:
+  aws-cdk: ^2.32.0
+  lodash.get: ^4.4.2
+  serverless-iam-roles-per-function: ^3.2.0
+
+devDependencies:
+  aws-cdk: 2.32.0
+  lodash.get: 4.4.2
+  serverless-iam-roles-per-function: 3.2.0
+
+packages:
+
+  /aws-cdk/2.32.0:
+    resolution: {integrity: sha512-+kXT92TI5dTZA65URHPgX6iqY+msS+srs89XkTzGhPT83GXNU1Tkr0rhVCbGHejT7x0UmwITukY+wBhueNaMUg==}
+    engines: {node: '>= 14.15.0'}
+    hasBin: true
+    optionalDependencies:
+      fsevents: 2.3.2
+    dev: true
+
+  /fsevents/2.3.2:
+    resolution: {integrity: sha512-xiqMQR4xAeHTuB9uWm+fFRcIOgKBMiOBP+eXiyT7jsgVCq1bkVygt00oASowB7EdtpOHaaPgKt812P9ab+DDKA==}
+    engines: {node: ^8.16.0 || ^10.6.0 || >=11.0.0}
+    os: [darwin]
+    requiresBuild: true
+    dev: true
+    optional: true
+
+  /lodash.get/4.4.2:
+    resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
+    dev: true
+
+  /lodash/4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+    dev: true
+
+  /serverless-iam-roles-per-function/3.2.0:
+    resolution: {integrity: sha512-AXmxACHEUsDcFDcv8QNwDgn2L0brRJ7pz/phD3lFB/wQ3TtPJkorC+J7PxgFQbaWIQk15EIlU83BtKXeQoPTAg==}
+    engines: {node: '>=10'}
+    dependencies:
+      lodash: 4.17.21
+    dev: true

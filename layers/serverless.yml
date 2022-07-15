@@ -1,0 +1,28 @@
+service: "swb-tools-layers"
+
+frameworkVersion: "3"
+
+provider:
+  name: "aws"
+  runtime: "nodejs14.x"
+  region: "us-east-1"
+
+custom:
+  cdk: "${file(./aws-cdk/nodejs/package.json)}"
+  lodash: "${file(./lodash/nodejs/package.json)}"
+  scriptable:
+    hooks:
+      before:package:createDeploymentArtifacts: "pnpm -r install"
+
+layers:
+  CDK:
+    path: "aws-cdk"
+    name: "${self:custom.cdk.name}-${sls:stage}"
+    description: "${self:custom.cdk.description}"
+  Lodash:
+    path: "lodash"
+    name: "${self:custom.lodash.name}-${sls:stage}"
+    description: "${self:custom.lodash.description}"
+
+plugins:
+  - "serverless-scriptable-plugin"

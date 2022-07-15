@@ -1,0 +1,9 @@
+{
+	"name": "swb-tools-notification",
+	"description": "Send email notification on user account activation",
+	"devDependencies": {
+		"aws-cdk": "^2.32.0",
+		"lodash.get": "^4.4.2",
+		"serverless-iam-roles-per-function": "^3.2.0"
+	}
+}
