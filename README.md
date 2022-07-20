@@ -39,18 +39,22 @@ Deploy lambda layers, if they have changes or don't already exist.
 ```shell
 cd layers
 serverless deploy --stage <stage>
-cd ../
 ```
 
-Create and/or update the config file for the stage you're deploying
+Create and/or update the config file for the stage you're deploying.
 ```shell
 cp config.example.yml config.<stage>.yml
 vi config.<stage>.yml
 ```
 
-Deploy lambdas
+Test new lambda changes.
+```shell
+cd <lambda>
+pnpm test
+```
+
+Deploy lambdas changes.
 ```shell
 cd <lambda>
 serverless deploy --stage <stage>
-cd ../
 ```

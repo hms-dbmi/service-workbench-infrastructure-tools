@@ -14,6 +14,7 @@ package:
     - "!template.js"
     - "!pnpm-lock.yaml"
     - "!*.test.js"
+    - "!__snapshots__/**"
 
 custom:
   config: "${file(../config.${sls:stage}.yml)}"
@@ -41,7 +42,7 @@ functions:
               dynamodb:
                 OldImage:
                   status:
-                    S: ["inactive"]
+                    S: ["pending", "inactive"]
                 NewImage:
                   status:
                     S: ["active"]
@@ -57,6 +58,7 @@ functions:
     environment:
       REGION: "${self:provider.region}"
       TEMPLATE: "${self:service}-${self:custom.template.userActivation.templateName}"
+      FROM_EMAIL: "${self:custom.config.fromEmail}"
 
 resources:
   Resources:

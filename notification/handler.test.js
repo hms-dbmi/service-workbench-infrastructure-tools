@@ -21,6 +21,9 @@ const testRecord = (uid, first, last, email, at, by) => ({
     }
   }
 });
+
+process.env.TEMPLATE = 'some-template-name';
+process.env.FROM_EMAIL = 'some@email.com';
  
 describe('activation', () => {
   const user_1 = testRecord('1234', 'test', 'tester', 'test@example.com', 'friday', 'adminion');
@@ -32,7 +35,7 @@ describe('activation', () => {
     logger.info = jest.spyOn(console, "log").mockImplementation(() => {});
     logger.error = jest.spyOn(console, "error").mockImplementation(() => {});
   });
-  it('should return status 200 on success', async () => {
+  it('should return status 200', async () => {
     sendEmailMock.mockResolvedValueOnce({ MessageId: '535' });
     sendEmailMock.mockResolvedValueOnce({ MessageId: '536' });
     const response = await activation(records);
@@ -55,6 +58,12 @@ describe('activation', () => {
     sendEmailMock.mockResolvedValueOnce({ MessageId: '536' });
     await activation(records);
     expect(sendEmailMock).toHaveBeenCalledTimes(2);
+  });
+  it('should attempt to send an email with correct parameters', async () => {
+    sendEmailMock.mockResolvedValueOnce({ MessageId: '535' });
+    sendEmailMock.mockResolvedValueOnce({ MessageId: '536' });
+    await activation(records);
+    expect(sendEmailMock.mock.calls).toMatchSnapshot();
   });
   it('should log any email send errors', async () => {
     sendEmailMock.mockResolvedValueOnce({ MessageId: '535' });
