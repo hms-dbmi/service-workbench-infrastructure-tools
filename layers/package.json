@@ -1,7 +1,7 @@
 {
-	"name": "swb-tools-layers",
-	"description": "Generate and upload common js dependency packages for use in lambdas",
-	"devDependencies": {
-		"serverless-scriptable-plugin": "^1.2.2"
-	}
+  "name": "swb-tools-layers",
+  "description": "Generate and upload common js dependency packages for use in lambdas",
+  "devDependencies": {
+    "serverless-scriptable-plugin": "^1.2.2"
+  }
 }
