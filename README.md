@@ -61,7 +61,7 @@ serverless deploy --stage <stage>
 
 # Lambdas
 ## Notification
-Requires the lodash layer to be deployed. Because theis stack did not originate the dynamodb table, it can not add a stream to the table post-deployment. The original stack must be updated to include a stream, or one must be added manually (which could be overwritten on future deployments).
+Requires the lodash layer to be deployed. Because this stack did not originate the dynamodb table, it can not add a stream to the table post-deployment. The original stack must be updated to include a stream, or one must be added manually (which could be overwritten on future deployments).
 ```yaml
 # yml file where table is created, like /main/solution/backend/config/infra/cloudformation.yml
 Resources:
@@ -80,10 +80,10 @@ Resources:
 
   # ...
 ```
-Find the ARN for this stream, and add it to the config under `userTableArn`.
+Find the ARN for this stream, and add it to a config under `userTableArn`.
 
-## SES Authentication to send email
-The only other things that are needed are related to SES authentication.
+### SES Authentication to send email
+The only other things that are needed to send email are related to SES authentication and getting out of the sandbox.
 - [Moving out of the Amazon SES sandbox](https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html)
 - [Email authentication methods](https://docs.aws.amazon.com/ses/latest/dg/email-authentication-methods.html)
   - [Authenticating Email with DKIM](https://docs.aws.amazon.com/ses/latest/dg/send-email-authentication-dkim.html)
