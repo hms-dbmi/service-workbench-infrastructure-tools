@@ -1,6 +1,0 @@
-userTableArn: arn:aws:dynamodb:us-east-1:023731083598:table/byon-va-byon-Users/stream/2022-07-15T14:14:35.815
-
-# Lambda layer versions
-# Override if using a different deployed version than 1
-# layer-cdk-version: 1
-# layer-lodash-version: 1
