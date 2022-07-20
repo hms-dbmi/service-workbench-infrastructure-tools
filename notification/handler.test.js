@@ -24,6 +24,7 @@ const testRecord = (uid, first, last, email, at, by) => ({
 
 process.env.TEMPLATE = 'some-template-name';
 process.env.FROM_EMAIL = 'some@email.com';
+process.env.FROM_NAME = 'Someone';
  
 describe('activation', () => {
   const user_1 = testRecord('1234', 'test', 'tester', 'test@example.com', 'friday', 'adminion');

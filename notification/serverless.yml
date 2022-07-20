@@ -59,6 +59,7 @@ functions:
       REGION: "${self:provider.region}"
       TEMPLATE: "${self:service}-${self:custom.template.userActivation.templateName}"
       FROM_EMAIL: "${self:custom.config.fromEmail}"
+      FROM_NAME: "${self:custom.config.fromName}"
 
 resources:
   Description: "${self:custom.info.description}"

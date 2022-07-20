@@ -1,6 +1,7 @@
 region: us-east-1
 
 fromEmail: some@email.com
+fromName: AIM-AHEAD
 
 userTableArn: arn:aws:dynamodb:<region>:<account>:table/<table>/stream/<streamId>
 

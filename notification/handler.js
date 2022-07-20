@@ -26,7 +26,7 @@ const mapEventPaths = (paths, defaultValue = 'UNKNOWN') => {
 const eventData = ({ uid, updatedBy, updatedAt }) => `${uid} activated by ${updatedBy} at ${updatedAt}`;
 const sendEmail = async ({ email, firstName, lastName }) => {
   const params = {
-    Source: `AIM-AHEAD <${process.env.FROM_EMAIL}>`,
+    Source: `${process.env.FROM_NAME} <${process.env.FROM_EMAIL}>`,
     Template: process.env.TEMPLATE,
     Destination: {
       ToAddresses: [ email ]
