@@ -1,7 +1,0 @@
-{
-  "name": "swb-tools-layers-aws-cdk",
-  "description": "AWS CDK package for use with lambdas",
-  "dependencies": {
-    "aws-cdk": "^2.32.0"
-  }
-}

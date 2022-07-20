@@ -1,5 +1,9 @@
 'use strict';
 const get = require('lodash.get');
+const AWS = require('aws-sdk');
+
+AWS.config.update({ region: process.env.REGION || 'us-east-1' });
+const sesClient = new AWS.SES({apiVersion: '2010-12-01'});
 
 const paths = {
   uid: 'dynamodb.NewImage.uid.S',
@@ -19,11 +23,30 @@ const mapEventPaths = (paths, defaultValue = 'UNKNOWN') => {
   );
 }
 
+const eventData = ({ uid, updatedBy, updatedAt }) => `${uid} activated by ${updatedBy} at ${updatedAt}`;
+const sendEmail = async ({ email, firstName, lastName }) => {
+  const params = {
+    Source: "Samantha Piatt AIM-AHEAD <samantha.piatt@childrens.harvard.edu>",
+    Template: process.env.TEMPLATE,
+    Destination: {
+      ToAddresses: [ email ]
+    },
+    TemplateData: JSON.stringify({ name: `${firstName} ${lastName}` })
+  };
+  return sesClient.sendTemplatedEmail(params).promise();
+}
+
 module.exports.activation = async function(dbEvent) {
   const records = dbEvent.Records.map(mapEventPaths(paths));
-  const updates = records.map(({ uid, updatedBy, updatedAt }) => 
-    `${uid} activated by ${updatedBy} at ${updatedAt}`
-  );
-  console.log('User activation:', updates.join(', '));
-  return { statusCode: 200, body: {} };
+  console.log('User activation:', records.map(eventData).join(', '));
+
+  const emailAttempts = await Promise.allSettled(records.map(sendEmail));
+  const rejected = emailAttempts.filter(attempt => attempt.status == 'rejected');
+  rejected.forEach(error => console.error(error.reason));
+
+  return {
+    statusCode: 200,
+    body: rejected.length == 0 ? {}
+      : `An error occured while sending emails. Success: ${records.length - rejected.length}, Failure: ${rejected.length}`
+  };
 }
