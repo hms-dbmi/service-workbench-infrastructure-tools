@@ -80,6 +80,12 @@ describe('activation', () => {
     const response = await activation(testRecords);
     expect(response.body).toMatchSnapshot();
   });
+  it('should return 200 on any failure', async () => {
+    const testRecords = { Records: [ user_error ]};
+    sendEmailMock.mockRejectedValueOnce(new Error('Some error'));
+    const response = await activation(testRecords);
+    expect(response.statusCode).toMatchSnapshot();
+  });
   afterEach(() => {
     jest.clearAllMocks();
   });

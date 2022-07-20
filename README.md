@@ -38,7 +38,7 @@ export AWS_PROFILE=<profile name>
 Deploy lambda layers, if they have changes or don't already exist.
 ```shell
 cd layers
-serverless deploy --stage <stage>
+serverless deploy
 ```
 
 Create and/or update the config file for the stage you're deploying.
