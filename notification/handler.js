@@ -5,7 +5,7 @@ const AWS = require('aws-sdk');
 AWS.config.update({ region: process.env.REGION || 'us-east-1' });
 const sesClient = new AWS.SES({apiVersion: '2010-12-01'});
 
-const paths = {
+const eventPaths = {
   uid: 'dynamodb.NewImage.uid.S',
   firstName: 'dynamodb.NewImage.firstName.S',
   lastName: 'dynamodb.NewImage.lastName.S',
@@ -37,7 +37,7 @@ const sendEmail = async ({ email, firstName, lastName }) => {
 }
 
 module.exports.activation = async function(dbEvent) {
-  const records = dbEvent.Records.map(mapEventPaths(paths));
+  const records = dbEvent.Records.map(mapEventPaths(eventPaths));
   console.log('User activation:', records.map(eventData).join(', '));
 
   const emailAttempts = await Promise.allSettled(records.map(sendEmail));

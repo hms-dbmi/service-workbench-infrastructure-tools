@@ -61,6 +61,7 @@ functions:
       FROM_EMAIL: "${self:custom.config.fromEmail}"
 
 resources:
+  Description: "${self:custom.info.description}"
   Resources:
     UserActivationNotificationTemplate:
       Type: "AWS::SES::Template"

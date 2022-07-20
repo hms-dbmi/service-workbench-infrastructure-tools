@@ -17,7 +17,9 @@ layers:
   Lodash:
     path: "lodash"
     name: "${self:custom.lodash.name}-${sls:stage}"
-    description: "${self:custom.lodash.description}"
+
+resources:
+  Description: "${self:custom.lodash.description}"
 
 plugins:
   - "serverless-scriptable-plugin"

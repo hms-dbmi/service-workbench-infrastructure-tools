@@ -5,7 +5,7 @@ AWS lambda functions to extend SWB functionality
 # Install
 This repository uses Node version 16, pnpm, and serverless. Skip or use steps below as you need.
 ```shell
-# Setup node version 16 and update npm
+# Setup node version 16 using nvm and update npm
 nvm install 16
 npm install -g npm@latest
 ```
@@ -22,13 +22,13 @@ pnpm add -g pnpm
 pnpm add -g serverless
 ```
 
-# Deploy
-Install package dependencies, recursively
+# Test & Deploy
+Install package dependencies, recursively, to run the handler and tests.
 ```shell
 pnpm -r install
 ```
 
-Update AWS credentials
+Update your AWS credentials for deployments.
 ```shell
 vi ~/.aws/config
 vi ~/.aws/credentials
@@ -47,7 +47,7 @@ cp config.example.yml config.<stage>.yml
 vi config.<stage>.yml
 ```
 
-Test new lambda changes.
+Test new lambda handler changes.
 ```shell
 cd <lambda>
 pnpm test
