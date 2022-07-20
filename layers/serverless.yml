@@ -1,0 +1,25 @@
+service: "swb-tools-layers"
+
+frameworkVersion: "3"
+
+provider:
+  name: "aws"
+  runtime: "nodejs14.x"
+  region: "us-east-1"
+
+custom:
+  lodash: "${file(./lodash/nodejs/package.json)}"
+  scriptable:
+    hooks:
+      before:package:createDeploymentArtifacts: "pnpm -r install"
+
+layers:
+  Lodash:
+    path: "lodash"
+    name: "${self:custom.lodash.name}-${sls:stage}"
+
+resources:
+  Description: "${self:custom.lodash.description}"
+
+plugins:
+  - "serverless-scriptable-plugin"

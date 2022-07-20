@@ -1,0 +1,19 @@
+lockfileVersion: 5.4
+
+specifiers:
+  serverless-scriptable-plugin: ^1.2.2
+
+devDependencies:
+  serverless-scriptable-plugin: 1.2.2
+
+packages:
+
+  /bluebird/3.7.2:
+    resolution: {integrity: sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==}
+    dev: true
+
+  /serverless-scriptable-plugin/1.2.2:
+    resolution: {integrity: sha512-vIXasDZJBTMPxCgi4v+vwmysL6EMLgUBHcKIpu5YtpS1HkRIFloTxLXh9g2f/+6EemqBthrLUYnhB3EsTO1h9g==}
+    dependencies:
+      bluebird: 3.7.2
+    dev: true

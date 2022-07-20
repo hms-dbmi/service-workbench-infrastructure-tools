@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`activation should attempt to send an email with correct parameters 1`] = `
+Array [
+  Array [
+    Object {
+      "Destination": Object {
+        "ToAddresses": Array [
+          "test@example.com",
+        ],
+      },
+      "Source": "Someone <some@email.com>",
+      "Template": "some-template-name",
+      "TemplateData": "{\\"name\\":\\"test tester\\"}",
+    },
+  ],
+  Array [
+    Object {
+      "Destination": Object {
+        "ToAddresses": Array [
+          "mock@example.com",
+        ],
+      },
+      "Source": "Someone <some@email.com>",
+      "Template": "some-template-name",
+      "TemplateData": "{\\"name\\":\\"mock mocker\\"}",
+    },
+  ],
+]
+`;
+
+exports[`activation should log any email send errors 1`] = `
+Array [
+  [Error: Some error],
+]
+`;
+
+exports[`activation should log the user ids that were activated 1`] = `
+Array [
+  "User activation:",
+  "1234 activated by adminion at friday, 2345 activated by adminion at thursday",
+]
+`;
+
+exports[`activation should return an error message in body if any record send fails 1`] = `"An error occured while sending emails. Success: 2, Failure: 1"`;
