@@ -55,6 +55,10 @@ functions:
           - "dynamodb:GetShardIterator"
           - "dynamodb:ListStreams"
         Resource: "${self:custom.config.userTableArn}"
+      - Effect: "Allow"
+        Action:
+          - ses:SendTemplatedEmail
+        Resource: "*"
     environment:
       REGION: "${self:provider.region}"
       TEMPLATE: "${self:service}-${self:custom.template.userActivation.templateName}"
