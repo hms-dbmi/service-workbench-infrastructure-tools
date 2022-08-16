@@ -2,12 +2,18 @@ lockfileVersion: 5.4
 
 specifiers:
   lodash.get: ^4.4.2
+  lodash.mapvalues: ^4.6.0
 
 dependencies:
   lodash.get: 4.4.2
+  lodash.mapvalues: 4.6.0
 
 packages:
 
   /lodash.get/4.4.2:
     resolution: {integrity: sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==}
+    dev: false
+
+  /lodash.mapvalues/4.6.0:
+    resolution: {integrity: sha512-JPFqXFeZQ7BfS00H58kClY7SPVeHertPE0lNuCyZ26/XlN8TvakYD7b9bGyNmXbT/D3BbtPAAmq90gPWqLkxlQ==}
     dev: false

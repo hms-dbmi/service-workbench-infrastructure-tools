@@ -2,6 +2,7 @@
   "name": "swb-tools-layers-lodash",
   "description": "Lodash related methods for lambdas",
   "dependencies": {
-    "lodash.get": "^4.4.2"
+    "lodash.get": "^4.4.2",
+    "lodash.mapvalues": "^4.6.0"
   }
 }
