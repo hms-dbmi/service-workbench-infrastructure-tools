@@ -1,0 +1,31 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`notification should attempt to publish to topic with correct parameters 1`] = `
+Array [
+  Array [
+    Object {
+      "Message": "New user registrations:
+
+Name: test tester 
+Created: friday 
+Email: test@example.com 
+Reason: I want to test things!
+
+Name: mock mocker 
+Created: thursday 
+Email: mock@example.com 
+Reason: Testing is my life",
+      "Subject": "AIM-AHEAD - SWB User Registrations are Pending",
+      "TopicArn": "arn:aws:sns:us-east-1:<account>:<topic>",
+    },
+  ],
+]
+`;
+
+exports[`notification should log error message on failure 1`] = `"[[\\"An error occured while publishing to 'arn:aws:sns:us-east-1:<account>:<topic>' topic - Error: Some SNS topic publishing error\\"]]"`;
+
+exports[`notification should log success message 1`] = `"[[\\"System created new users with uids:\\",\\"123, 234\\"],[\\"Successfully published notification to 'arn:aws:sns:us-east-1:<account>:<topic>' topic.\\"]]"`;
+
+exports[`notification should return a message on success 1`] = `"Successfully published notification to 'arn:aws:sns:us-east-1:<account>:<topic>' topic."`;
+
+exports[`notification should return the error on failure 1`] = `"An error occured while publishing to 'arn:aws:sns:us-east-1:<account>:<topic>' topic - Error: Some SNS topic publishing error"`;

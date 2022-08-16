@@ -1,0 +1,51 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "firstName",
+    "lastName",
+    "email"
+  ],
+  "properties": {
+    "firstName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[A-Za-z0-9 .-]+$",
+      "errorMessage": {
+        "pattern": "First name must contain only alphanumeric characters, with the exception of ' .-' symbols.",
+        "minLength": "First name must be at least 1 character.",
+        "maxLength": "First name must be less than 100 characters."
+      }
+    },
+    "lastName": {
+      "type": "string",
+      "minLength": 1,
+      "maxLength": 100,
+      "pattern": "^[A-Za-z0-9 .-]+$",
+      "errorMessage": {
+        "pattern": "Last name must contain only alphanumeric characters, with the exception of ' .-' symbols.",
+        "minLength": "Last name must be at least 1 character.",
+        "maxLength": "Last name must be less than 100 characters."
+      }
+    },
+    "email": {
+      "type": "string",
+      "minLength": 5,
+      "maxLength": 254,
+      "pattern": "^([^.%+!$&*=^|~#%{}]+)[a-zA-Z0-9\\._%+!$&*=^|~#%{}/\\-]+([^.!]+)@([^-.!](([a-zA-Z0-9\\-]+\\.){1,}([a-zA-Z]{2,63})))",
+      "errorMessage": {
+        "pattern": "Email address must be a in a valid format. Example: user@example.com",
+        "minLength": "Email must be at least 5 characters.",
+        "maxLength": "Email must be less than 254 characters."
+      }
+    }
+  },
+  "errorMessage": {
+    "required": {
+      "firstName": "First name is required",
+      "lastName": "Last name is required",
+      "email": "Email is required"
+    }
+  }
+}

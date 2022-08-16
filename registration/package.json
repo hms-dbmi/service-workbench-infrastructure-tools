@@ -1,0 +1,17 @@
+{
+  "name": "swb-tools-registration-api",
+  "description": "Publish notification to SNS topic on user account creation",
+  "scripts": {
+    "test": "jest"
+  },
+  "devDependencies": {
+    "ajv": "^8.11.0",
+    "ajv-errors": "^3.0.0",
+    "aws-sdk": "^2.1176.0",
+    "aws-sdk-mock": "^5.7.0",
+    "jest": "^28.1.3",
+    "lodash.mapvalues": "^4.6.0",
+    "serverless-iam-roles-per-function": "^3.2.0",
+    "uuid": "^3.4.0"
+  }
+}

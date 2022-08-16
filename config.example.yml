@@ -1,9 +1,13 @@
 region: us-east-1
 
+domain: some-domain.com
+
 fromEmail: some@email.com
 fromName: AIM-AHEAD
 
-userTableArn: arn:aws:dynamodb:<region>:<account>:table/<table>/stream/<streamId>
+userTableName: a-table-name
+userTableStream: some-stream-name
+userPoolUrl: "https://cognito-idp.<region>.amazonaws.com/<pool_id>"
 
 ### Lambda layer versions
 ### Override if using a different deployed layer version

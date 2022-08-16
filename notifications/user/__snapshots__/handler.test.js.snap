@@ -42,4 +42,6 @@ Array [
 ]
 `;
 
+exports[`activation should return 200 on any failure 1`] = `200`;
+
 exports[`activation should return an error message in body if any record send fails 1`] = `"An error occured while sending emails. Success: 2, Failure: 1"`;

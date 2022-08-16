@@ -1,6 +1,6 @@
 {
-  "name": "swb-tools-notification",
-  "description": "Send email notification on user account activation",
+  "name": "swb-tools-admin-notification",
+  "description": "Publish notification to SNS topic on user account creation",
   "scripts": {
     "test": "jest"
   },
@@ -12,3 +12,4 @@
     "serverless-iam-roles-per-function": "^3.2.0"
   }
 }
+  

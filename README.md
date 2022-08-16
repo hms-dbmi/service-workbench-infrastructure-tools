@@ -49,13 +49,13 @@ vi config.<stage>.yml
 
 Test new lambda handler changes.
 ```shell
-cd <lambda>
+cd <lambda> # Example: cd notifications/user
 pnpm test
 ```
 
 Deploy lambdas changes.
 ```shell
-cd <lambda>
+cd <lambda> # Example: cd notifications/user
 serverless deploy --stage <stage>
 ```
 

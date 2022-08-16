@@ -1,0 +1,80 @@
+service: "swb-tools-user-notification"
+
+frameworkVersion: "3"
+
+provider:
+  name: "aws"
+  runtime: "nodejs14.x"
+  region: "${self:custom.config.region}"
+
+package:
+  patterns:
+    - "!node_modules/**"
+    - "!package.json"
+    - "!template.js"
+    - "!pnpm-lock.yaml"
+    - "!*.test.js"
+    - "!__snapshots__/**"
+
+custom:
+  config: "${file(../../config.${sls:stage}.yml)}"
+  info: "${file(./package.json)}"
+  template: "${file(./template.js)}"
+  layer-lodash: "${file(../../layers/lodash/nodejs/package.json):name}"
+
+functions:
+  ActivationNotification:
+    handler: "handler.activation"
+    description: "${self:custom.info.description}"
+    layers:
+      - "arn:aws:lambda:${self:provider.region}:${aws:accountId}:layer:${self:custom.layer-lodash}-${sls:stage}:${self:custom.config.layer-lodash-version, 1}"
+    events:
+      - stream:
+          type: "dynamodb"
+          arn: "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${self:custom.config.userTableName}/stream/${self:custom.config.userTableStream}"
+          # To reduce invokations and associated costs, function is invoked when one of the following conditions is met:
+          # The payload size reaches 6MB, the Batch Window reaches its maximum value, or the Batch Size reaches its maximum value.
+          batchSize: 5 # (default: 100, max 1000)
+          batchWindow: 120 # 2 minutes # (max 300 seconds)
+          startingPosition: "LATEST"
+          filterPatterns:
+            - eventName: ["MODIFY"]
+              dynamodb:
+                OldImage:
+                  status:
+                    S: ["pending", "inactive"]
+                NewImage:
+                  status:
+                    S: ["active"]
+    iamRoleStatementsName: "${self:service}-iam-stream-${sls:stage}"
+    iamRoleStatements:
+      - Effect: "Allow"     
+        Action:
+          - "dynamodb:DescribeStream"
+          - "dynamodb:GetRecords"
+          - "dynamodb:GetShardIterator"
+          - "dynamodb:ListStreams"
+        Resource: "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${self:custom.config.userTableName}/stream/${self:custom.config.userTableStream}"
+      - Effect: "Allow"
+        Action:
+          - ses:SendTemplatedEmail
+        Resource: "*"
+    environment:
+      REGION: "${self:provider.region}"
+      TEMPLATE: "${self:service}-${self:custom.template.userActivation.templateName}"
+      FROM_EMAIL: "${self:custom.config.fromEmail}"
+      FROM_NAME: "${self:custom.config.fromName}"
+
+resources:
+  Description: "${self:custom.info.description}"
+  Resources:
+    UserActivationNotificationTemplate:
+      Type: "AWS::SES::Template"
+      Properties: 
+        Template: 
+          TemplateName: "${self:service}-${self:custom.template.userActivation.templateName}"
+          HtmlPart: "${self:custom.template.userActivation.body}"
+          SubjectPart: "${self:custom.template.userActivation.subject}"
+
+plugins:
+  - "serverless-iam-roles-per-function"
