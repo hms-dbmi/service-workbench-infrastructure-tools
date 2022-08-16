@@ -17,9 +17,9 @@ package:
     - "!__snapshots__/**"
 
 custom:
-  config: "${file(../../config.${sls:stage}.yml)}"
+  config: "${file(../../configs/${sls:stage}.yml)}"
   info: "${file(./package.json)}"
-  template: "${file(./template.js)}"
+  template: "${file(../../configs/${self:custom.config.emailTemplateName}.json)}"
   layer-lodash: "${file(../../layers/lodash/nodejs/package.json):name}"
 
 functions:

@@ -43,8 +43,8 @@ serverless deploy
 
 Create and/or update the config file for the stage you're deploying.
 ```shell
-cp config.example.yml config.<stage>.yml
-vi config.<stage>.yml
+cp configs/example.yml configs/<stage>.yml
+vi configs/<stage>.yml
 ```
 
 Test new lambda handler changes.

@@ -4,6 +4,7 @@ domain: some-domain.com
 
 fromEmail: some@email.com
 fromName: AIM-AHEAD
+emailTemplateName: userActivationTemplate
 
 userTableName: a-table-name
 userTableStream: some-stream-name
