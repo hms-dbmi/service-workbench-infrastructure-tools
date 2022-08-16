@@ -49,6 +49,10 @@ vi config.<stage>.yml
 
 Test new lambda handler changes.
 ```shell
+# all lambdas
+pnpm -r test
+
+# specific lambda
 cd <lambda> # Example: cd notifications/user
 pnpm test
 ```
@@ -60,8 +64,15 @@ serverless deploy --stage <stage>
 ```
 
 # Lambdas
-## Notification
-Requires the lodash layer to be deployed. Because this stack did not originate the dynamodb table, it can not add a stream to the table post-deployment. The original stack must be updated to include a stream, or one must be added manually (which could be overwritten on future deployments).
+## User account creation - notification to user via SES
+path: `notifications/user`
+
+requires: lodash layer
+
+Sends an email through SES to the user who's account has been marked as activated through the SWB ui.
+
+### Notes: 
+Because this stack did not originate the dynamodb table, it can not add a stream to the table post-deployment. The original stack must be updated to include a stream, or one must be added manually (which could be overwritten on future deployments).
 ```yaml
 # yml file where table is created, like /main/solution/backend/config/infra/cloudformation.yml
 Resources:
@@ -82,7 +93,7 @@ Resources:
 ```
 Find the ARN for this stream, and add it to a config under `userTableArn`.
 
-### SES Authentication to send email
+**SES Authentication to send email**
 The only other things that are needed to send email are related to SES authentication and getting out of the sandbox.
 - [Moving out of the Amazon SES sandbox](https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html)
 - [Email authentication methods](https://docs.aws.amazon.com/ses/latest/dg/email-authentication-methods.html)
@@ -90,3 +101,19 @@ The only other things that are needed to send email are related to SES authentic
   - [Authenticating Email with SPF](https://docs.aws.amazon.com/ses/latest/dg/send-email-authentication-spf.html)
   - [Using a custom MAIL FROM domain](https://docs.aws.amazon.com/ses/latest/dg/mail-from.html)
 - [Receive bounces and complaints with email feedback forwarding](https://docs.aws.amazon.com/ses/latest/dg/monitor-sending-activity-using-notifications-email.html)
+
+
+## User account creation - notification to admins via SNS
+path: `notifications/admin`
+
+requires: lodash layer
+
+Creates an SNS topic and lambda to push notifications of new users who were created by the `_system_` user.
+
+
+## User Registration API
+path: `registration`
+
+requires" the lodash, uuid, and ajv layers
+
+Registers a new user through api gateway, adding them to the existing users database with pre-populated values for smooth user creation.
