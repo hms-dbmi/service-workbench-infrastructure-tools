@@ -20,14 +20,14 @@ custom:
   config: "${file(../../configs/${sls:stage}.yml)}"
   info: "${file(./package.json)}"
   template: "${file(../../configs/${self:custom.config.emailTemplateName}.json)}"
-  layer-lodash: "${file(../../layers/lodash/nodejs/package.json):name}"
+  layer-lodash: "${file(../../layers/lodash/nodejs/package.json)}"
 
 functions:
   ActivationNotification:
     handler: "handler.activation"
     description: "${self:custom.info.description}"
     layers:
-      - "arn:aws:lambda:${self:provider.region}:${aws:accountId}:layer:${self:custom.layer-lodash}-${sls:stage}:${self:custom.config.layer-lodash-version, 1}"
+      - "arn:aws:lambda:${self:provider.region}:${aws:accountId}:layer:${self:custom.layer-lodash.name}-${self:custom.layer-lodash.version}-${sls:stage}:1"
     events:
       - stream:
           type: "dynamodb"

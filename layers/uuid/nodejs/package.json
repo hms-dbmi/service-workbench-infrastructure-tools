@@ -1,5 +1,6 @@
 {
   "name": "swb-tools-layers-uuid",
+  "version": "0.1.0",
   "description": "UUID package to create RFC4122 UUIDs for lambdas.",
   "dependencies": {
     "uuid": "^3.4.0"

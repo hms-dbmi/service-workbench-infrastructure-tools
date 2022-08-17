@@ -6,12 +6,6 @@ userTableName: a-table-name
 userTableStream: some-stream-name
 userPoolUrl: "https://cognito-idp.<region>.amazonaws.com/<pool_id>"
 
-### Lambda layer versions
-### Override if using a different deployed layer version
-# layer-lodash-avj: 1
-# layer-lodash-version: 1
-# layer-lodash-uuid: 1
-
 # Notification/User
 fromEmail: some@email.com
 fromName: AIM-AHEAD
