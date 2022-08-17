@@ -1,7 +1,7 @@
 // 'use strict';
 const mapValues = require('lodash.mapvalues');
 
-module.exports.putUserParams = function({ uid, firstName, lastName, email }) {
+module.exports.getUserParams = function({ uid, firstName, lastName, email, createdAt }) {
   // Helper method to populate the DynamoDB types for insertion, default unknown values to a string
   const dynamoFormat = function(data = '') {
     const value = () => data;
@@ -22,7 +22,7 @@ module.exports.putUserParams = function({ uid, firstName, lastName, email }) {
       uid,
       applyReason: process.env.USER_REASON,
       authenticationProviderId: process.env.USER_POOL,
-      createdAt: new Date().toISOString(),
+      createdAt,
       createdBy: '_system_',
       email,
       username: email,

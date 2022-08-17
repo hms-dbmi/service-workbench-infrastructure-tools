@@ -1,0 +1,36 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`registerUser should attempt to add user to the database with correct params 1`] = `
+Array [
+  Array [
+    Object {
+      "getUserParams": Object {
+        "createdAt": "2016-06-20T12:08:10.000Z",
+        "email": "test@email.com",
+        "firstName": "Test",
+        "lastName": "Tester",
+        "uid": "12345",
+      },
+    },
+  ],
+]
+`;
+
+exports[`registerUser should log error message on database failure 1`] = `"[[\\"An error occured while registering user.\\",\\"Some database error\\"]]"`;
+
+exports[`registerUser should log error message on validation failure 1`] = `"[[\\"User validation errors:\\\\nSome validation error\\"]]"`;
+
+exports[`registerUser should log the user id that was successfull created 1`] = `"[[\\"Successfully registered user 12345.\\"]]"`;
+
+exports[`registerUser should return a message on success 1`] = `"Successfully registered user 12345."`;
+
+exports[`registerUser should return an error on database failure 1`] = `"An error occured while registering user."`;
+
+exports[`registerUser should return an error on validation failure 1`] = `
+Object {
+  "errors": Array [
+    "Some validation error",
+  ],
+  "message": "Encountered input validation errors.",
+}
+`;

@@ -2,38 +2,49 @@
 const { v4: uuid } = require('uuid');
 const AWS = require('aws-sdk');
 
-const { putUserParams } = require('./db');
+const { getUserParams } = require('./db');
 const { validateInput } = require('./validation');
 
 AWS.config.update({ region: process.env.REGION || 'us-east-1' });
 const DDB = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
 
-module.exports.registration = function(data) {
+const status = {
+  OK: 200,
+  BAD_REQUEST: 400,
+  SERVER_ERROR: 500
+};
+
+module.exports.registration = function(data, validateInput, getUserParams, uuid) {
   // Validate user input
-  const validation = validateInput(data)
-  if (validation.errors.length > 0) {
-    console.error(`User validation errors:\n${validation.errors.join('\n')}`);
+  const validationErrors = validateInput(data);
+  if (validationErrors.length > 0) {
+    console.error(`User validation errors:\n${validationErrors.join('\n')}`);
     return {
-      status: 400,
+      statusCode: status.BAD_REQUEST,
       body: {
         message: 'Encountered input validation errors.',
-        errors: validation.errors
+        errors: validationErrors
       }
     }
   }
 
   // Insert into database
   const uid = uuid();
-  return DDB.putItem(putUserParams({ uid, ...data }))
+  const createdAt = new Date().toISOString();
+  return DDB.putItem(getUserParams({ uid, createdAt, ...data }))
     .promise()
     .then(() => {
-      const message = `Successfully registered user as ${uid}.`;
+      const message = `Successfully registered user ${uid}.`;
       console.log(message);
-      return { statusCode: 200, body: message };
+      return { statusCode: status.OK, body: message };
     })
     .catch(error => {
       const message = 'An error occured while registering user.';
-      console.error(message, error);
-      return { statusCode: 500, body: message };
+      console.error(message, error.message);
+      return { statusCode: status.SERVER_ERROR, body: message };
     });
-};
+}
+
+module.exports.registerUser = function(data){
+  return this.registration(data, validateInput, getUserParams, uuid);
+}

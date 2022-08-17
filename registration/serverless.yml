@@ -25,7 +25,7 @@ custom:
 
 functions:
   AccountRegistrationNotification:
-    handler: "handler.notification"
+    handler: "handler.registerUser"
     description: "${self:custom.info.description}"
     layers:
       - "arn:aws:lambda:${self:provider.region}:${aws:accountId}:layer:${self:custom.layer-ajv}-${sls:stage}:${self:custom.config.layer-ajv-version, 1}"
