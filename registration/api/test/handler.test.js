@@ -1,5 +1,5 @@
 const AWS = require('aws-sdk');
-const { registration: reg } = require('../handler');
+const { registration: reg } = require('../src/handler');
 
 jest.mock("aws-sdk");
 const putItemMock = jest.fn();

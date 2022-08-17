@@ -1,4 +1,4 @@
-const { validateInput } = require('../validation');
+const { validateInput } = require('../src/validation');
 
 describe('validateInput', () => {
   const testData = {

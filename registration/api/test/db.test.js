@@ -1,4 +1,4 @@
-const { getUserParams } = require('../db');
+const { getUserParams } = require('../src/db');
 
 process.env.USER_TABLE = 'some-table';
 process.env.USER_REASON = 'testing fun';
