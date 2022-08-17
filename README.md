@@ -113,7 +113,7 @@ Creates an SNS topic and lambda to push notifications of new users who were crea
 
 
 ## User Registration API
-path: `registration`
+path: `registration/api`
 
 requires" the lodash, uuid, and ajv layers
 
