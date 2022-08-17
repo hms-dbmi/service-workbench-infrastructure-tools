@@ -47,6 +47,9 @@ functions:
       REGION: "${self:provider.region}"
       USER_TABLE: "${self:custom.config.userTableName}"
       USER_POOL: "${self:custom.config.userPoolUrl}"
+      IDP_NAME: "${self:custom.config.registrationIDP}"
+      USER_ROLE: "${self:custom.config.registrationRole}"
+      USER_REASON: "${self:custom.config.registrationReason}"
 
 resources:
   Description: "${self:custom.info.description}"

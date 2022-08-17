@@ -2,10 +2,6 @@ region: us-east-1
 
 domain: some-domain.com
 
-fromEmail: some@email.com
-fromName: AIM-AHEAD
-emailTemplateName: userActivationTemplate
-
 userTableName: a-table-name
 userTableStream: some-stream-name
 userPoolUrl: "https://cognito-idp.<region>.amazonaws.com/<pool_id>"
@@ -15,3 +11,13 @@ userPoolUrl: "https://cognito-idp.<region>.amazonaws.com/<pool_id>"
 # layer-lodash-avj: 1
 # layer-lodash-version: 1
 # layer-lodash-uuid: 1
+
+# Notification/User
+fromEmail: some@email.com
+fromName: AIM-AHEAD
+emailTemplateName: userActivationTemplate
+
+# Registration
+registrationReason: 'AIM-AHEAD participation.'
+registrationIDP: 'Auth0'
+registrationRole: 'researcher'

@@ -20,7 +20,7 @@ module.exports.putUserParams = function({ uid, firstName, lastName, email }) {
     TableName: process.env.USER_TABLE,
     Item: mapValues({
       uid,
-      applyReason: 'AIM-AHEAD participant',
+      applyReason: process.env.USER_REASON,
       authenticationProviderId: process.env.USER_POOL,
       createdAt: new Date().toISOString(),
       createdBy: '_system_',
@@ -29,16 +29,16 @@ module.exports.putUserParams = function({ uid, firstName, lastName, email }) {
       encryptedCreds: 'N/A',
       firstName,
       lastName,
-      identityProviderName: 'Auth0',
+      identityProviderName: process.env.IDP_NAME,
       isAdmin: false,
       isExternalUser: true,
       isNativePoolUser: false,
       isSamlAuthenticatedUser: true,
-      ns: `Auth0||||${process.env.USER_POOL}`,
+      ns: `${process.env.IDP_NAME}||||${process.env.USER_POOL}`,
       projectId: [],
       rev: '1',
       status: 'pending',
-      userRole: 'researcher'
+      userRole: process.env.USER_ROLE
     }, dynamoFormat)
   };
 }
