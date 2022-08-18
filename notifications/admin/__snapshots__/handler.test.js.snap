@@ -15,7 +15,7 @@ Name: mock mocker
 Created: thursday 
 Email: mock@example.com 
 Reason: Testing is my life",
-      "Subject": "AIM-AHEAD - SWB User Registrations are Pending",
+      "Subject": "Some SNS event subject",
       "TopicArn": "arn:aws:sns:us-east-1:<account>:<topic>",
     },
   ],

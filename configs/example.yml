@@ -12,6 +12,7 @@ fromName: AIM-AHEAD
 emailTemplateName: userActivationTemplate
 
 # Registration
+registrationSubject: 'AIM-AHEAD - SWB User Registrations are Pending'
 registrationReason: 'AIM-AHEAD participation.'
 registrationIDP: 'Auth0'
 registrationRole: 'researcher'

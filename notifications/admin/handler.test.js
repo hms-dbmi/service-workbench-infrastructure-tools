@@ -23,6 +23,7 @@ const testRecord = (uid, first, last, email, createdAt, applyReason) => ({
 });
 
 process.env.TOPIC_ARN = 'arn:aws:sns:us-east-1:<account>:<topic>';
+process.env.SUBJECT = 'Some SNS event subject';
  
 describe('notification', () => {
   const user_1 = testRecord('123', 'test', 'tester', 'test@example.com', 'friday', 'I want to test things!');

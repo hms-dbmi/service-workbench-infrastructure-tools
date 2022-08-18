@@ -32,7 +32,7 @@ module.exports.notification = function(dbEvents) {
     
     console.log('System created new users with uids:', records.map(({ uid }) => uid).join(', '));
     return SNS.publish({
-        Subject: `AIM-AHEAD - SWB User Registrations are Pending`,
+        Subject: process.env.SUBJECT,
         Message:  `New user registrations:\n\n${users}`,
         TopicArn: process.env.TOPIC_ARN
       })

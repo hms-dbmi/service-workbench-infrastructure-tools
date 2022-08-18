@@ -61,6 +61,7 @@ functions:
     environment:
       REGION: "${aws:region}"
       TOPIC_ARN: "arn:aws:sns:${aws:region}:${aws:accountId}:${self:custom.topicName}"
+      SUBJECT: "${self:custom.config.registrationSubject}"
 
 resources:
   Resources:
