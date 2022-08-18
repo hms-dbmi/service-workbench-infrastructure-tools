@@ -8,13 +8,11 @@ Array [
 
 Name: test tester 
 Created: friday 
-Email: test@example.com 
-Reason: I want to test things!
+Email: test@example.com
 
 Name: mock mocker 
 Created: thursday 
-Email: mock@example.com 
-Reason: Testing is my life",
+Email: mock@example.com",
       "Subject": "Some SNS event subject",
       "TopicArn": "arn:aws:sns:us-east-1:<account>:<topic>",
     },

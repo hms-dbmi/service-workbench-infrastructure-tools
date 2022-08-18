@@ -24,7 +24,7 @@ const mapEventPaths = (paths, defaultValue = 'UNKNOWN') => {
 }
 
 const formatRecord = ({ email, firstName, lastName, createdAt, applyReason }) =>
-  `Name: ${firstName} ${lastName} \nCreated: ${createdAt} \nEmail: ${email} \nReason: ${applyReason}`;
+  `Name: ${firstName} ${lastName} \nCreated: ${createdAt} \nEmail: ${email}`;
  
 module.exports.notification = function(dbEvents) {
     const records = dbEvents.Records.map(mapEventPaths(eventPaths));
