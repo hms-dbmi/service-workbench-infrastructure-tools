@@ -5,7 +5,6 @@ frameworkVersion: "3"
 provider:
   name: "aws"
   runtime: "nodejs14.x"
-  region: "${self:custom.config.region}"
 
 package:
   patterns:
@@ -19,18 +18,21 @@ package:
 custom:
   config: "${file(../../configs/${sls:stage}.yml)}"
   info: "${file(./package.json)}"
-  layer-lodash: "${file(../../layers/lodash/nodejs/package.json):name}"
+  layer-lodash: "${file(../../layers/lodash/nodejs/package.json)}"
+  topicName: "${self:service}-${sls:stage}-topic"
+  streamArn: "arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:custom.config.userTableName}/stream/${self:custom.config.userTableStream}"
 
 functions:
   AccountRegistrationNotification:
     handler: "handler.notification"
+    name: "${self:service}-${sls:stage}"
     description: "${self:custom.info.description}"
     layers:
-      - "arn:aws:lambda:${self:provider.region}:${aws:accountId}:layer:${self:custom.layer-lodash.name}-${self:custom.layer-lodash.version}-${sls:stage}:1"
+      - "arn:aws:lambda:${aws:region}:${aws:accountId}:layer:${layerName(${self:custom.layer-lodash})}-${sls:stage}:1"
     events:
       - stream:
           type: "dynamodb"
-          arn: "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${self:custom.config.userTableName}/stream/${self:custom.config.userTableStream}"
+          arn: "${self:custom.streamArn}"
           # To reduce invokations and associated costs, function is invoked when one of the following conditions is met:
           # The payload size reaches 6MB, the Batch Window reaches its maximum value, or the Batch Size reaches its maximum value.
           batchSize: 10 # (default: 100, max 1000)
@@ -42,6 +44,7 @@ functions:
                 NewImage:
                   createdBy:
                     S: ["_system_"]
+    iamRoleStatementsName: "${self:service}-${sls:stage}-lambda"
     iamRoleStatements:
       - Effect: "Allow"     
         Action:
@@ -49,24 +52,24 @@ functions:
           - "dynamodb:GetRecords"
           - "dynamodb:GetShardIterator"
           - "dynamodb:ListStreams"
-        Resource: "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${self:custom.config.userTableName}/stream/${self:custom.config.userTableStream}"
+        Resource: "${self:custom.streamArn}"
       - Effect: "Allow"     
         Action:
           - "sns:Publish"
           - "sns:Subscribe"
-        Resource: AccountRegistrationTopic
+        Resource: !Ref AccountRegistrationTopic
     environment:
-      REGION: "${self:provider.region}"
-      SNS_TOPIC: AccountRegistrationTopic
+      REGION: "${aws:region}"
+      TOPIC_ARN: "arn:aws:sns:${aws:region}:${aws:accountId}:${self:custom.topicName}"
 
 resources:
-  Description: "${self:custom.info.description}"
   Resources:
     AccountRegistrationTopic:
-        Type: AWS::SNS::Topic
+        Type: "AWS::SNS::Topic"
         Properties:
-          DisplayName: 'SWB account user registration notification to admins.'
-          TopicName: 'swb-tools-admin-notification-topic'
+          DisplayName: "SWB account user registration notification to admins."
+          TopicName: "${self:custom.topicName}"
 
 plugins:
   - "serverless-iam-roles-per-function"
+  - ../../layers/layerNamePlugin

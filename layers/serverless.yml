@@ -9,7 +9,7 @@ provider:
 
 custom:
   lodash: "${file(./lodash/nodejs/package.json)}"
-  avl: "${file(./avl/nodejs/package.json)}"
+  ajv: "${file(./ajv/nodejs/package.json)}"
   uuid: "${file(./uuid/nodejs/package.json)}"
   scriptable:
     hooks:
@@ -19,15 +19,16 @@ layers:
   Lodash:
     path: "lodash"
     description: "${self:custom.lodash.description}"
-    name: "${self:custom.lodash.name}-${self:custom.lodash.version}-${sls:stage}"
-  avl:
-    path: "avl"
-    description: "${self:custom.avl.description}"
-    name: "${self:custom.avl.name}-${self:custom.avl.version}-${sls:stage}"
+    name: "${layerName(${self:custom.lodash})}-${sls:stage}"
+  ajv:
+    path: "ajv"
+    description: "${self:custom.ajv.description}"
+    name: "${layerName(${self:custom.ajv})}-${sls:stage}"
   uuid:
     path: "uuid"
-    description: "${self:custom.uui.description}"
-    name: "${self:custom.uuid.name}-${self:custom.uuid.version}-${sls:stage}"
+    description: "${self:custom.uuid.description}"
+    name: "${layerName(${self:custom.ajv})}-${sls:stage}"
 
 plugins:
   - "serverless-scriptable-plugin"
+  - ./layerNamePlugin

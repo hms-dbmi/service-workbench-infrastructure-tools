@@ -5,7 +5,6 @@ frameworkVersion: "3"
 provider:
   name: "aws"
   runtime: "nodejs14.x"
-  region: "${self:custom.config.region}"
 
 package:
   patterns:
@@ -22,20 +21,22 @@ custom:
   layer-avj: "${file(../../layers/ajv/nodejs/package.json)}"
   layer-lodash: "${file(../../layers/lodash/nodejs/package.json)}"
   layer-uuid: "${file(../../layers/uuid/nodejs/package.json)}"
+  userTableArn: "arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:custom.config.userTableName}"
 
 functions:
   AccountRegistrationNotification:
     handler: "src/handler.registerUser"
+    name: "${self:service}-${sls:stage}"
     description: "${self:custom.info.description}"
     layers:
-      - "arn:aws:lambda:${self:provider.region}:${aws:accountId}:layer:${self:custom.layer-lodash.name}-${self:custom.layer-lodash.version}-${sls:stage}:1"
-      - "arn:aws:lambda:${self:provider.region}:${aws:accountId}:layer:${self:custom.layer-avl.name}-${self:custom.layer-avl.version}-${sls:stage}:1"
-      - "arn:aws:lambda:${self:provider.region}:${aws:accountId}:layer:${self:custom.layer-uuid.name}-${self:custom.layer-uuid.version}-${sls:stage}:1"
+      - "arn:aws:lambda:${aws:region}:${aws:accountId}:layer:${layerName(${self:custom.lodash})}-${sls:stage}:1"
+      - "arn:aws:lambda:${aws:region}:${aws:accountId}:layer:${layerName(${self:custom.ajv})}-${sls:stage}:1"
+      - "arn:aws:lambda:${aws:region}:${aws:accountId}:layer:${layerName(${self:custom.uuid})}-${sls:stage}:1"
     iamRoleStatements:
       - Effect: "Allow"     
         Action:
           - "dynamodb:PutItem"
-        Resource: "arn:aws:dynamodb:${AWS::Region}:${AWS::AccountId}:table/${self:custom.config.userTableName}"
+        Resource: "${self:custom.config.userTableArn}"
     events:
       - http:
           path: api/register
@@ -44,15 +45,13 @@ functions:
             origins:
               - "http://*${self:custom.config.domain}"
     environment:
-      REGION: "${self:provider.region}"
+      REGION: "${aws:region}"
       USER_TABLE: "${self:custom.config.userTableName}"
       USER_POOL: "${self:custom.config.userPoolUrl}"
       IDP_NAME: "${self:custom.config.registrationIDP}"
       USER_ROLE: "${self:custom.config.registrationRole}"
       USER_REASON: "${self:custom.config.registrationReason}"
 
-resources:
-  Description: "${self:custom.info.description}"
-
 plugins:
   - "serverless-iam-roles-per-function"
+  - ../../layers/layerNamePlugin

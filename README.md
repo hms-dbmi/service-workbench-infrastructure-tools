@@ -65,6 +65,8 @@ serverless deploy --stage <stage>
 
 # Lambdas
 ## User account creation - notification to user via SES
+name: `swb-tools-user-notification-<stage>`
+
 path: `notifications/user`
 
 requires: lodash layer
@@ -105,6 +107,8 @@ The only other things that are needed to send email are related to SES authentic
 
 
 ## User account creation - notification to admins via SNS
+name: `swb-tools-admin-notification-<stage>`
+
 path: `notifications/admin`
 
 requires: lodash layer
@@ -113,6 +117,8 @@ Creates an SNS topic and lambda to push notifications of new users who were crea
 
 
 ## User Registration API
+name: `swb-tools-registration-api-<stage>`
+
 path: `registration/api`
 
 requires" the lodash, uuid, and ajv layers
