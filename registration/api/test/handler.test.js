@@ -1,16 +1,19 @@
 const AWS = require('aws-sdk');
 const { registration: reg } = require('../src/handler');
 
+const putMock = jest.fn();
+
 jest.mock("aws-sdk");
-const putItemMock = jest.fn();
-AWS.DynamoDB.prototype.putItem = jest.fn().mockImplementation(params => ({
-  promise: () => putItemMock(params)
-}));
+AWS.DynamoDB.DocumentClient.prototype.put.mockImplementation(params => ({ promise: () => putMock(params) }));
 
 const logger = {};
 const validateInputMock = jest.fn();
-const getUserParamsMock = jest.fn();
 const uuidMock = jest.fn();
+
+process.env.USER_TABLE = 'Users';
+process.env.USER_REASON = 'Testing';
+process.env.USER_POOL = 'some pool id';
+process.env.IDP_NAME = 'Test IDP';
 
 describe('registerUser', () => {
   let registerUser;
@@ -23,6 +26,7 @@ describe('registerUser', () => {
   const validationError = ['Some validation error'];
   const validationSuccess = [];
   const databaseError = new Error('Some database error');
+  
   beforeAll(() => {
     jest.useFakeTimers('modern');
     jest.setSystemTime(new Date(1466424490000));
@@ -31,23 +35,22 @@ describe('registerUser', () => {
     // capture and print nothing
     logger.info = jest.spyOn(console, 'log').mockImplementation(() => {});
     logger.error = jest.spyOn(console, 'error').mockImplementation(() => {});
+
     uuidMock.mockReturnValue(testUuid);
-    getUserParamsMock.mockImplementation(x => ({ 'getUserParams': x }));
-    registerUser = data => reg(data, validateInputMock, getUserParamsMock, uuidMock);
+    registerUser = data => reg(data, validateInputMock, uuidMock);
   });
 
   it('should not throw an error', async () => {
     validateInputMock.mockReturnValue(validationSuccess);
-    putItemMock.mockResolvedValueOnce();
+    putMock.mockResolvedValueOnce();
     expect(() => registerUser(testData)).not.toThrowError();
   });
   it('should attempt to add user to the database with correct params', async () => {
-    putItemMock.mockResolvedValueOnce();
+    putMock.mockResolvedValueOnce();
     await registerUser(testData);
     expect(validateInputMock).toHaveBeenCalled();
-    expect(getUserParamsMock).toHaveBeenCalled();
-    expect(putItemMock).toHaveBeenCalled();
-    expect(putItemMock.mock.calls).toMatchSnapshot();
+    expect(putMock).toHaveBeenCalled();
+    expect(putMock.mock.calls).toMatchSnapshot();
   });
 
   // it('should try to get the database parameters with the correct input arguments')
@@ -55,19 +58,18 @@ describe('registerUser', () => {
   // Status
   it('should return status 200 on success', async () => {
     validateInputMock.mockReturnValue(validationSuccess);
-    putItemMock.mockResolvedValueOnce();
+    putMock.mockResolvedValueOnce();
     const response = await registerUser(testData);
     expect(response.statusCode).toEqual(200);
   });
   it('should return status 400 on validation error', async () => {
-    // logger.info = jest.spyOn(console, 'log');
     validateInputMock.mockReturnValue(validationError);
     const response = await registerUser(testData);
     expect(response.statusCode).toEqual(400);
   });
   it('should return status 500 on database error', async () => {
     validateInputMock.mockReturnValue(validationSuccess);
-    putItemMock.mockRejectedValueOnce(databaseError);
+    putMock.mockRejectedValueOnce(databaseError);
     const response = await registerUser(testData);
     expect(response.statusCode).toEqual(500);
   });
@@ -75,7 +77,7 @@ describe('registerUser', () => {
   // Body
   it('should return a message on success', async () => {
     validateInputMock.mockReturnValue(validationSuccess);
-    putItemMock.mockResolvedValueOnce();
+    putMock.mockResolvedValueOnce();
     const response = await registerUser(testData);
     expect(response.body).toMatchSnapshot();
   });
@@ -86,7 +88,7 @@ describe('registerUser', () => {
   });
   it('should return an error on database failure', async () => {
     validateInputMock.mockReturnValue(validationSuccess);
-    putItemMock.mockRejectedValueOnce(databaseError);
+    putMock.mockRejectedValueOnce(databaseError);
     const response = await registerUser(testData);
     expect(response.body).toMatchSnapshot();
   });
@@ -94,7 +96,7 @@ describe('registerUser', () => {
   // Logging
   it('should log the user id that was successfull created', async () => {
     validateInputMock.mockReturnValue(validationSuccess);
-    putItemMock.mockResolvedValueOnce();
+    putMock.mockResolvedValueOnce();
     await registerUser(testData);
     expect(JSON.stringify(logger.info.mock.calls).includes(testUuid)).toBeTruthy();
     expect(JSON.stringify(logger.info.mock.calls)).toMatchSnapshot();
@@ -106,7 +108,7 @@ describe('registerUser', () => {
   });
   it('should log error message on database failure', async () => {
     validateInputMock.mockReturnValue(validationSuccess);
-    putItemMock.mockRejectedValueOnce(databaseError);
+    putMock.mockRejectedValueOnce(databaseError);
     await registerUser(testData);
     expect(JSON.stringify(logger.error.mock.calls)).toMatchSnapshot();
   });

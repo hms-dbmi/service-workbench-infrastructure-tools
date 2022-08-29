@@ -4,13 +4,29 @@ exports[`registerUser should attempt to add user to the database with correct pa
 Array [
   Array [
     Object {
-      "getUserParams": Object {
+      "Item": Object {
+        "applyReason": "Testing",
+        "authenticationProviderId": "some pool id",
         "createdAt": "2016-06-20T12:08:10.000Z",
+        "createdBy": "_system_",
         "email": "test@email.com",
+        "encryptedCreds": "N/A",
         "firstName": "Test",
+        "identityProviderName": "Test IDP",
+        "isAdmin": false,
+        "isExternalUser": true,
+        "isNativePoolUser": false,
+        "isSamlAuthenticatedUser": true,
         "lastName": "Tester",
+        "ns": "Test IDP||||some pool id",
+        "projectId": Array [],
+        "rev": "1",
+        "status": "pending",
         "uid": "12345",
+        "userRole": undefined,
+        "username": "test@email.com",
       },
+      "TableName": "Users",
     },
   ],
 ]
