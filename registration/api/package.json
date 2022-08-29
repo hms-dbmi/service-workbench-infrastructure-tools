@@ -12,7 +12,6 @@
     "aws-sdk-mock": "^5.7.0",
     "jest": "^28.1.3",
     "lodash.mapvalues": "^4.6.0",
-    "re2": "^1.17.7",
     "serverless-iam-roles-per-function": "^3.2.0",
     "uuid": "^8.3.2"
   }

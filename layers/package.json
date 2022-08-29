@@ -2,7 +2,7 @@
   "name": "swb-tools-layers",
   "description": "Generate and upload common js dependency packages for use in lambdas",
   "scripts": {
-    "build-layer": "npm-recursive-install --skip-root --omit=dev"
+    "build-layers": "npm-recursive-install --skip-root --omit=dev"
   },
   "devDependencies": {
     "serverless-scriptable-plugin": "^1.2.2",

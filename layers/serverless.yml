@@ -13,7 +13,7 @@ custom:
   uuid: "${file(./uuid/nodejs/package.json)}"
   scriptable:
     hooks:
-      before:package:createDeploymentArtifacts: "pnpm build-layer"
+      before:package:createDeploymentArtifacts: "pnpm build-layers"
 
 layers:
   Lodash:

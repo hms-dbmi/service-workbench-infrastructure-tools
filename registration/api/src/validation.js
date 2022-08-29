@@ -1,12 +1,11 @@
 // 'use strict';
 const AJV = require('ajv').default;
-const RE2 = require('re2'); // See https://ajv.js.org/security.html#redos-attack
 const addFormats = require('ajv-formats');
 const addErrors = require('ajv-errors');
 
 const schema = require('./schema.json');
 
-const jsonValidator = new AJV({ allErrors: true, regExp: RE2 });
+const jsonValidator = new AJV({ allErrors: true });
 addErrors(jsonValidator);
 addFormats(jsonValidator, { mode: 'fast', formats: [ 'email' ] });
 

@@ -2,11 +2,9 @@
 const { v4: uuid } = require('uuid');
 const AWS = require('aws-sdk');
 
-// const { getUserParams } = require('./db');
 const { validateInput } = require('./validation');
 
 AWS.config.update({ region: process.env.REGION || 'us-east-1' });
-// const DDB = new AWS.DynamoDB({ apiVersion: '2012-08-10' });
 const DDB = new AWS.DynamoDB.DocumentClient();
 console.log('DDB put', DDB.put());
 
@@ -16,7 +14,7 @@ const status = {
   SERVER_ERROR: 500
 };
 
-module.exports.registration = function(data, validateInput, uuid) {
+const registration = function(data, validateInput, uuid) {
   // Validate user input
   const validationErrors = validateInput(data);
   if (validationErrors.length > 0) {
@@ -71,6 +69,7 @@ module.exports.registration = function(data, validateInput, uuid) {
     });
 }
 
+module.exports.registration = registration; // Used in testing
 module.exports.registerUser = function(data){
   return this.registration(data, validateInput, uuid);
 }
