@@ -9,7 +9,6 @@ provider:
 
 custom:
   lodash: "${file(./lodash/nodejs/package.json)}"
-  ajv: "${file(./ajv/nodejs/package.json)}"
   uuid: "${file(./uuid/nodejs/package.json)}"
   scriptable:
     hooks:
@@ -20,10 +19,6 @@ layers:
     path: "lodash"
     description: "${self:custom.lodash.description}"
     name: "${layerName(${self:custom.lodash})}-${sls:stage}"
-  ajv:
-    path: "ajv"
-    description: "${self:custom.ajv.description}"
-    name: "${layerName(${self:custom.ajv})}-${sls:stage}"
   uuid:
     path: "uuid"
     description: "${self:custom.uuid.description}"

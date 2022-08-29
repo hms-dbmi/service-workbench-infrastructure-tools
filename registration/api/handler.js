@@ -2,36 +2,17 @@
 const { v4: uuid } = require('uuid');
 const AWS = require('aws-sdk');
 
-const { validateInput } = require('./validation');
-
 AWS.config.update({ region: process.env.REGION || 'us-east-1' });
 const DDB = new AWS.DynamoDB.DocumentClient();
-console.log('DDB put', DDB.put());
 
-const status = {
-  OK: 200,
-  BAD_REQUEST: 400,
-  SERVER_ERROR: 500
-};
+const status = { OK: 200, SERVER_ERROR: 500 };
+const headers = { 'Content-Type': 'application/json' };
 
-const registration = function(data, validateInput, uuid) {
-  // Validate user input
-  const validationErrors = validateInput(data);
-  if (validationErrors.length > 0) {
-    console.error(`User validation errors:\n${validationErrors.join('\n')}`);
-    return {
-      statusCode: status.BAD_REQUEST,
-      body: {
-        message: 'Encountered input validation errors.',
-        errors: validationErrors
-      }
-    }
-  }
-
-  // Insert into database
+module.exports.registerUser = function(event) {
+  const { firstName, lastName, email } = JSON.parse(event.body);
   const uid = uuid();
   const createdAt = new Date().toISOString();
-  const { firstName, lastName, email } = data;
+
   return DDB.put({
     TableName: process.env.USER_TABLE,
     Item: {
@@ -60,16 +41,11 @@ const registration = function(data, validateInput, uuid) {
     .then(() => {
       const message = `Successfully registered user ${uid}.`;
       console.log(message);
-      return { statusCode: status.OK, body: message };
+      return { headers, statusCode: status.OK, body: JSON.stringify({ message }) };
     })
     .catch(error => {
       const message = 'An error occured while registering user.';
       console.error(message, error.message);
-      return { statusCode: status.SERVER_ERROR, body: message };
+      throw new Error(`[${status.SERVER_ERROR}] ${message}`);
     });
-}
-
-module.exports.registration = registration; // Used in testing
-module.exports.registerUser = function(data){
-  return this.registration(data, validateInput, uuid);
 }
