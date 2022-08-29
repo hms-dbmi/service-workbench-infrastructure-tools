@@ -1,6 +1,6 @@
 {
   "name": "swb-tools-layers-lodash",
-  "version": "0.1.0",
+  "version": "1.0.0",
   "description": "Lodash related methods for lambdas",
   "dependencies": {
     "lodash.get": "^4.4.2",

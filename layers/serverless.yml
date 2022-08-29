@@ -13,7 +13,7 @@ custom:
   uuid: "${file(./uuid/nodejs/package.json)}"
   scriptable:
     hooks:
-      before:package:createDeploymentArtifacts: "pnpm -r install"
+      before:package:createDeploymentArtifacts: "pnpm build-layer"
 
 layers:
   Lodash:
@@ -27,7 +27,7 @@ layers:
   uuid:
     path: "uuid"
     description: "${self:custom.uuid.description}"
-    name: "${layerName(${self:custom.ajv})}-${sls:stage}"
+    name: "${layerName(${self:custom.uuid})}-${sls:stage}"
 
 plugins:
   - "serverless-scriptable-plugin"

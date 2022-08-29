@@ -12,8 +12,8 @@ package:
     - "!package.json"
     - "!template.js"
     - "!pnpm-lock.yaml"
-    - "!*.test.js"
-    - "!__snapshots__/**"
+    - "!test/*"
+    - "!test/__snapshots__/*"
 
 custom:
   config: "${file(../../configs/${sls:stage}.yml)}"
@@ -29,21 +29,23 @@ functions:
     name: "${self:service}-${sls:stage}"
     description: "${self:custom.info.description}"
     layers:
-      - "arn:aws:lambda:${aws:region}:${aws:accountId}:layer:${layerName(${self:custom.lodash})}-${sls:stage}:1"
-      - "arn:aws:lambda:${aws:region}:${aws:accountId}:layer:${layerName(${self:custom.ajv})}-${sls:stage}:1"
-      - "arn:aws:lambda:${aws:region}:${aws:accountId}:layer:${layerName(${self:custom.uuid})}-${sls:stage}:1"
+      - "arn:aws:lambda:${aws:region}:${aws:accountId}:layer:${layerName(${self:custom.layer-lodash})}-${sls:stage}:1"
+      - "arn:aws:lambda:${aws:region}:${aws:accountId}:layer:${layerName(${self:custom.layer-avj})}-${sls:stage}:1"
+      - "arn:aws:lambda:${aws:region}:${aws:accountId}:layer:${layerName(${self:custom.layer-uuid})}-${sls:stage}:1"
+    iamRoleStatementsName: "${self:service}-${sls:stage}-lambda"
     iamRoleStatements:
       - Effect: "Allow"     
         Action:
           - "dynamodb:PutItem"
-        Resource: "${self:custom.config.userTableArn}"
+        Resource: "${self:custom.userTableArn}"
     events:
       - http:
           path: api/register
           method: post
-          cors:
-            origins:
-              - "http://*${self:custom.config.domain}"
+          # cors:
+          #   origins:
+          #     - "http://localhost:3000"
+          #     - "http://*${self:custom.config.domain}"
     environment:
       REGION: "${aws:region}"
       USER_TABLE: "${self:custom.config.userTableName}"
