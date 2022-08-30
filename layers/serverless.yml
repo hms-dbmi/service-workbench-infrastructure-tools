@@ -8,8 +8,8 @@ provider:
   region: "us-east-1"
 
 custom:
-  lodash: "${file(./lodash/nodejs/package.json)}"
-  uuid: "${file(./uuid/nodejs/package.json)}"
+  lodash: ${file(./lodash/nodejs/package.json)}
+  uuid: ${file(./uuid/nodejs/package.json)}
   scriptable:
     hooks:
       before:package:createDeploymentArtifacts: "pnpm build-layers"
@@ -17,11 +17,11 @@ custom:
 layers:
   Lodash:
     path: "lodash"
-    description: "${self:custom.lodash.description}"
+    description: ${self:custom.lodash.description}
     name: "${layerName(${self:custom.lodash})}-${sls:stage}"
   uuid:
     path: "uuid"
-    description: "${self:custom.uuid.description}"
+    description: ${self:custom.uuid.description}
     name: "${layerName(${self:custom.uuid})}-${sls:stage}"
 
 plugins:

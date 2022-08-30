@@ -16,10 +16,10 @@ package:
     - "!__snapshots__/**"
 
 custom:
-  config: "${file(../../configs/${sls:stage}.yml)}"
-  info: "${file(./package.json)}"
-  template: "${file(../../configs/${self:custom.config.emailTemplateName}.json)}"
-  layer-lodash: "${file(../../layers/lodash/nodejs/package.json)}"
+  config: ${file(../../configs/${sls:stage}.yml)}
+  info: ${file(./package.json)}
+  template: ${file(../../configs/${self:custom.config.emailTemplateName}.json)}
+  layer-lodash: ${file(../../layers/lodash/nodejs/package.json)}
   streamArn: "arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:custom.config.userTableName}/stream/${self:custom.config.userTableStream}"
   templateName: "${self:service}-${self:custom.template.templateName}"
 
@@ -27,13 +27,13 @@ functions:
   ActivationNotification:
     handler: "handler.activation"
     name: "${self:service}-${sls:stage}"
-    description: "${self:custom.info.description}"
+    description: ${self:custom.info.description}
     layers:
       - "arn:aws:lambda:${aws:region}:${aws:accountId}:layer:${layerName(${self:custom.layer-lodash})}-${sls:stage}:1"
     events:
       - stream:
           type: "dynamodb"
-          arn: "${self:custom.streamArn}"
+          arn: ${self:custom.streamArn}
           # To reduce invokations and associated costs, function is invoked when one of the following conditions is met:
           # The payload size reaches 6MB, the Batch Window reaches its maximum value, or the Batch Size reaches its maximum value.
           batchSize: 5 # (default: 100, max 1000)
@@ -56,16 +56,16 @@ functions:
           - "dynamodb:GetRecords"
           - "dynamodb:GetShardIterator"
           - "dynamodb:ListStreams"
-        Resource: "${self:custom.streamArn}"
+        Resource: ${self:custom.streamArn}
       - Effect: "Allow"
         Action:
           - ses:SendTemplatedEmail
         Resource: "*"
     environment:
-      REGION: "${aws:region}"
-      TEMPLATE: "${self:custom.templateName}"
-      FROM_EMAIL: "${self:custom.config.fromEmail}"
-      FROM_NAME: "${self:custom.config.fromName}"
+      REGION: ${aws:region}
+      TEMPLATE: ${self:custom.templateName}
+      FROM_EMAIL: ${self:custom.config.fromEmail}
+      FROM_NAME: ${self:custom.config.fromName}
 
 resources:
   Resources:
@@ -73,9 +73,9 @@ resources:
       Type: "AWS::SES::Template"
       Properties: 
         Template: 
-          TemplateName: "${self:custom.templateName}"
-          HtmlPart: "${self:custom.template.body}"
-          SubjectPart: "${self:custom.template.subject}"
+          TemplateName: ${self:custom.templateName}
+          HtmlPart: ${self:custom.template.body}
+          SubjectPart: ${self:custom.template.subject}
 
 plugins:
   - "serverless-iam-roles-per-function"

@@ -1,18 +1,18 @@
 region: us-east-1
 
 domain: some-domain.com
-
 userTableName: a-table-name
-userTableStream: some-stream-name
+userTableStream: '2022-07-21T18:05:23.830'
 userPoolUrl: "https://cognito-idp.<region>.amazonaws.com/<pool_id>"
 
-# Notification/User
+# User Notification
 fromEmail: some@email.com
 fromName: AIM-AHEAD
 emailTemplateName: userActivationTemplate
 
-# Registration
+# Registration API
 registrationSubject: 'AIM-AHEAD - SWB User Registrations are Pending'
 registrationReason: 'AIM-AHEAD participation.'
 registrationIDP: 'Auth0'
 registrationRole: 'researcher'
+wafRateLimit: 500

@@ -2,8 +2,8 @@ const AWS = require('aws-sdk');
 const uuid = require('uuid');
 const { registerUser } = require('./handler');
 
-jest.mock("aws-sdk");
-jest.mock('uuid/v4');
+jest.mock('aws-sdk');
+jest.mock('uuid');
 const putMock = jest.fn();
 const queryMock = jest.fn();
 
@@ -34,7 +34,7 @@ describe('registerUser', () => {
   beforeEach(() => {
     AWS.DynamoDB.DocumentClient.prototype.put.mockImplementation(params => ({ promise: () => putMock(params) }));
     AWS.DynamoDB.DocumentClient.prototype.query.mockImplementation(params => ({ promise: () => queryMock(params) }));
-    uuid.mockReturnValue(testUuid);
+    uuid.v4.mockReturnValue(testUuid);
 
     // capture and print nothing
     logger.info = jest.spyOn(console, 'log').mockImplementation(() => {});

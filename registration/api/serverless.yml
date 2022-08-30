@@ -24,24 +24,29 @@ package:
     - "!pnpm-lock.yaml"
 
 custom:
-  config: "${file(../../configs/${sls:stage}.yml)}"
-  info: "${file(./package.json)}"
-  layer-uuid: "${file(../../layers/uuid/nodejs/package.json)}"
+  config: ${file(../../configs/${sls:stage}.yml)}
+  info: ${file(./package.json)}
+  layerUuid: ${file(../../layers/uuid/nodejs/package.json)}
   userTableArn: "arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:custom.config.userTableName}"
+  wafName: "${self:service}-WAF-${sls:stage}"
+  wafRateLimit: ${self:custom.config.wafRateLimit}
+  associateWaf:
+    name: ${self:custom.wafName}
+    version: V2 #(optional) Regional | V2
 
 functions:
   AccountRegistrationNotification:
     handler: "handler.registerUser"
     name: "${self:service}-${sls:stage}"
-    description: "${self:custom.info.description}"
+    description: ${self:custom.info.description}
     layers:
-      - "arn:aws:lambda:${aws:region}:${aws:accountId}:layer:${layerName(${self:custom.layer-uuid})}-${sls:stage}:1"
+      - "arn:aws:lambda:${aws:region}:${aws:accountId}:layer:${layerName(${self:custom.layerUuid})}-${sls:stage}:1"
     iamRoleStatementsName: "${self:service}-${sls:stage}-lambda"
     iamRoleStatements:
       - Effect: "Allow"     
         Action:
           - "dynamodb:PutItem"
-        Resource: "${self:custom.userTableArn}"
+        Resource: ${self:custom.userTableArn}
       - Effect: "Allow"
         Action:
           - "dynamodb:Query"
@@ -58,13 +63,18 @@ functions:
           #     - "http://localhost:3000"
           #     - "http://*${self:custom.config.domain}"
     environment:
-      REGION: "${aws:region}"
-      USER_TABLE: "${self:custom.config.userTableName}"
-      USER_POOL: "${self:custom.config.userPoolUrl}"
-      IDP_NAME: "${self:custom.config.registrationIDP}"
-      USER_ROLE: "${self:custom.config.registrationRole}"
-      USER_REASON: "${self:custom.config.registrationReason}"
+      REGION: ${aws:region}
+      USER_TABLE: ${self:custom.config.userTableName}
+      USER_POOL: ${self:custom.config.userPoolUrl}
+      IDP_NAME: ${self:custom.config.registrationIDP}
+      USER_ROLE: ${self:custom.config.registrationRole}
+      USER_REASON: ${self:custom.config.registrationReason}
+
+resources:
+  ${file(../../configs/waf.yml)}
 
 plugins:
   - "serverless-iam-roles-per-function"
+  - "serverless-associate-waf"
   - ../../layers/layerNamePlugin
+  
