@@ -44,6 +44,10 @@ functions:
         Action:
           - "dynamodb:PutItem"
         Resource: "${self:custom.userTableArn}"
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Query"
+        Resource: "${self:custom.userTableArn}/index/Principal"
     events:
       - http:
           path: api/register
@@ -62,6 +66,7 @@ functions:
       IDP_NAME: "${self:custom.config.registrationIDP}"
       USER_ROLE: "${self:custom.config.registrationRole}"
       USER_REASON: "${self:custom.config.registrationReason}"
+
 
 plugins:
   - "serverless-iam-roles-per-function"

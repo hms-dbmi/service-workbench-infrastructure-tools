@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`registerUser should attempt to add user to the database with correct params 1`] = `
+exports[`registerUser user does not exist should attempt to add user to the database with correct params 1`] = `
 Array [
   Array [
     Object {
@@ -32,8 +32,66 @@ Array [
 ]
 `;
 
-exports[`registerUser should log error message on database failure 1`] = `"[[\\"An error occured while registering user.\\",\\"Some database error\\"]]"`;
+exports[`registerUser user does not exist should log error message on database error 1`] = `"[[\\"An error occured while registering user.\\",\\"Some database error\\"]]"`;
 
-exports[`registerUser should log the user id that was successfull created 1`] = `"[[\\"Successfully registered user 12345.\\"]]"`;
+exports[`registerUser user does not exist should log the user id on success 1`] = `"[[\\"Successfully registered user 12345.\\"]]"`;
 
-exports[`registerUser should return a message on success 1`] = `"{\\"message\\":\\"Successfully registered user 12345.\\"}"`;
+exports[`registerUser user does not exist should return correct response on database error 1`] = `
+Response {
+  "body": "{\\"message\\":\\"An error occured while registering user.\\"}",
+  "headers": Object {
+    "Content-Type": "application/json",
+  },
+  "statusCode": 500,
+}
+`;
+
+exports[`registerUser user does not exist should return correct response on success 1`] = `
+Response {
+  "body": "{\\"message\\":\\"Successfully registered user 12345.\\"}",
+  "headers": Object {
+    "Content-Type": "application/json",
+  },
+  "statusCode": 200,
+}
+`;
+
+exports[`registerUser user exists should attempt to query user with correct params 1`] = `
+Array [
+  Array [
+    Object {
+      "ExpressionAttributeValues": Object {
+        ":email": "test@email.com",
+      },
+      "IndexName": "Principal",
+      "KeyConditionExpression": "username = :email",
+      "Select": "COUNT",
+      "TableName": "Users",
+    },
+  ],
+]
+`;
+
+exports[`registerUser user exists should log an error message containing email 1`] = `"[[\\"User email test@email.com already exists.\\"]]"`;
+
+exports[`registerUser user exists should log error message on database error 1`] = `"[[\\"An error occured while registering user.\\",\\"Some database error\\"]]"`;
+
+exports[`registerUser user exists should return correct response 1`] = `
+Response {
+  "body": "{\\"message\\":\\"User email test@email.com already exists.\\"}",
+  "headers": Object {
+    "Content-Type": "application/json",
+  },
+  "statusCode": 400,
+}
+`;
+
+exports[`registerUser user exists should return correct response on database error 1`] = `
+Response {
+  "body": "{\\"message\\":\\"An error occured while registering user.\\"}",
+  "headers": Object {
+    "Content-Type": "application/json",
+  },
+  "statusCode": 500,
+}
+`;
