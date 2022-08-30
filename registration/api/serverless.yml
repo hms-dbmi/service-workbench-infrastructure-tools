@@ -26,7 +26,6 @@ package:
 custom:
   config: "${file(../../configs/${sls:stage}.yml)}"
   info: "${file(./package.json)}"
-  layer-lodash: "${file(../../layers/lodash/nodejs/package.json)}"
   layer-uuid: "${file(../../layers/uuid/nodejs/package.json)}"
   userTableArn: "arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:custom.config.userTableName}"
 
@@ -36,7 +35,6 @@ functions:
     name: "${self:service}-${sls:stage}"
     description: "${self:custom.info.description}"
     layers:
-      - "arn:aws:lambda:${aws:region}:${aws:accountId}:layer:${layerName(${self:custom.layer-lodash})}-${sls:stage}:1"
       - "arn:aws:lambda:${aws:region}:${aws:accountId}:layer:${layerName(${self:custom.layer-uuid})}-${sls:stage}:1"
     iamRoleStatementsName: "${self:service}-${sls:stage}-lambda"
     iamRoleStatements:
@@ -66,7 +64,6 @@ functions:
       IDP_NAME: "${self:custom.config.registrationIDP}"
       USER_ROLE: "${self:custom.config.registrationRole}"
       USER_REASON: "${self:custom.config.registrationReason}"
-
 
 plugins:
   - "serverless-iam-roles-per-function"
