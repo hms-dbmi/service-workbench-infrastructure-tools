@@ -11,10 +11,6 @@ AWS lambda functions designed to extend SWB functionality.
   - path: `notification/admin`
   - lambda name: `swb-tools-admin-notification-<stage>`
   - requires: lodash layer
-- [User registration API](registration/api)
-  - path: `registration/api`
-  - lambda name: `swb-tools-registration-api-<stage>`
-  - requires: the lodash, uuid, and ajv layers
 
 # Install
 This repository uses Node version 16, pnpm, and serverless.
@@ -72,7 +68,7 @@ Test lambda locally with serverless emulation. (See [serverless invoke local doc
 pnpm sls invoke local \
   --stage <stage> \
   --function AccountRegistrationNotification \
-  --data '{"body":"{\"firstName\":\"Test\",\"lastName\":\"Tester\",\"email\":\"test@email.com\"}"}'
+  --data <handler payload>
 ```
 
 Preview serverless AWS cloudformation artifacts, using the package command. This will package the stack as it does for deployment; the package/artifacts are located in the `.serverless` folder.

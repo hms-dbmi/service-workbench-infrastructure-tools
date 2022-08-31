@@ -9,10 +9,3 @@ emailTemplateName: userActivationTemplate
 
 # Admin Notification
 registrationSubject: 'AIM-AHEAD - SWB User Registrations are Pending'
-
-# Registration API
-userPoolUrl: "https://cognito-idp.<region>.amazonaws.com/<pool_id>"
-registrationReason: 'AIM-AHEAD participation.'
-registrationIDP: 'Auth0'
-registrationRole: 'researcher'
-wafRateLimit: 500

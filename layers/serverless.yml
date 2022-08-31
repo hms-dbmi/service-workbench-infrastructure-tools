@@ -9,7 +9,6 @@ provider:
 
 custom:
   lodash: ${file(./lodash/nodejs/package.json)}
-  uuid: ${file(./uuid/nodejs/package.json)}
   scriptable:
     hooks:
       before:package:createDeploymentArtifacts: "pnpm build-layers"
@@ -19,10 +18,6 @@ layers:
     path: "lodash"
     description: ${self:custom.lodash.description}
     name: "${layerName(${self:custom.lodash})}-${sls:stage}"
-  uuid:
-    path: "uuid"
-    description: ${self:custom.uuid.description}
-    name: "${layerName(${self:custom.uuid})}-${sls:stage}"
 
 plugins:
   - "serverless-scriptable-plugin"
