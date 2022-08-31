@@ -3,15 +3,15 @@ AWS lambda functions designed to extend SWB functionality.
 
 # Lambdas
 
-- [Notification to user on account creation, via SES](notification/user/README.md)
+- [Notification to user on account creation, via SES](notification/user)
   - path: `notification/user`
   - lambda name: `swb-tools-user-notification-<stage>`
   - requires: lodash layer
-- [Notification to admin on user account creation, via SNS](notification/admin/README.md)
+- [Notification to admin on user account creation, via SNS](notification/admin)
   - path: `notification/admin`
   - lambda name: `swb-tools-admin-notification-<stage>`
   - requires: lodash layer
-- [User registration API](registration/api/README.md)
+- [User registration API](registration/api)
   - path: `registration/api`
   - lambda name: `swb-tools-registration-api-<stage>`
   - requires: the lodash, uuid, and ajv layers
