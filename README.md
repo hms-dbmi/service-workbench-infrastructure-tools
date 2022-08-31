@@ -46,17 +46,17 @@ This repository uses Node version 16, pnpm, and serverless.
   export AWS_PROFILE=<profile name>
   ```
 
+- Create and/or update the config file for the stage you're deploying.
+  ```shell
+  cp configs/example.yml configs/<stage>.yml
+  vi configs/<stage>.yml
+  ```
+
 - Deploy lambda layers, if there are changes or they don't already exist.
   ```shell
   cd layers
   pnpm install
   pnpm sls deploy
-  ```
-
-- Create and/or update the config file for the stage you're deploying.
-  ```shell
-  cp configs/example.yml configs/<stage>.yml
-  vi configs/<stage>.yml
   ```
 
 # Test & Deploy
@@ -69,15 +69,18 @@ pnpm test
 
 Test lambda locally with serverless emulation. (See [serverless invoke local documentation](https://www.serverless.com/framework/docs/providers/aws/cli-reference/invoke-local) for more specific instructions.)
 ```shell
-pnpm sls invoke local --stage <stage> --function AccountRegistrationNotification --data '{"body":"{\"firstName\":\"Test\",\"lastName\":\"Tester\",\"email\":\"test@email.com\"}"}'
+pnpm sls invoke local \
+  --stage <stage> \
+  --function AccountRegistrationNotification \
+  --data '{"body":"{\"firstName\":\"Test\",\"lastName\":\"Tester\",\"email\":\"test@email.com\"}"}'
 ```
 
-Preview serverless AWS cloudformation artifacts. Using the package command will package the stack as it does for deployment, without deploying it. You can find the package/artifacts by looking into the `.serverless` folder.
+Preview serverless AWS cloudformation artifacts, using the package command. This will package the stack as it does for deployment; the package/artifacts are located in the `.serverless` folder.
 ```shell
 pnpm sls package --stage <stage>
 ```
 
-To troubleshoot serverless parameter and variable resolution, run the print command.
+To verify serverless parameter and variable resolution, run the print command.
 ```shell
 pnpm sls print --stage <stage>
 ```
