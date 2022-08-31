@@ -24,7 +24,7 @@ package:
     - "!pnpm-lock.yaml"
 
 custom:
-  config: ${file(../../configs/${sls:stage}.yml)}
+  config: ${file(../../configs/stage.${sls:stage}.yml)}
   info: ${file(./package.json)}
   layerUuid: ${file(../../layers/uuid/nodejs/package.json)}
   userTableArn: "arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:custom.config.userTableName}"
@@ -71,7 +71,7 @@ functions:
       USER_REASON: ${self:custom.config.registrationReason}
 
 resources:
-  ${file(../../configs/waf.yml)}
+  ${file(../../configs/registrationWAF.yml)}
 
 plugins:
   - "serverless-iam-roles-per-function"
