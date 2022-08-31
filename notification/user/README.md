@@ -28,7 +28,7 @@ Resources:
 Find the name of this stream, and add it to a config under `userTableStream`.
 
 
-## SES REsources
+## SES Resources
 The only other things that are needed to send email are related to SES authentication and getting out of the sandbox.
 - [Moving out of the Amazon SES sandbox](https://docs.aws.amazon.com/ses/latest/dg/request-production-access.html)
 - [Email authentication methods](https://docs.aws.amazon.com/ses/latest/dg/email-authentication-methods.html)

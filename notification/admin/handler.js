@@ -10,8 +10,7 @@ const eventPaths = {
   email: 'dynamodb.NewImage.email.S',
   firstName: 'dynamodb.NewImage.firstName.S',
   lastName: 'dynamodb.NewImage.lastName.S',
-  createdAt: 'dynamodb.NewImage.createdAt.S',
-  applyReason: 'dynamodb.NewImage.applyReason.S'
+  createdAt: 'dynamodb.NewImage.createdAt.S'
 };
 
 // Return mapped path values
@@ -23,7 +22,7 @@ const mapEventPaths = (paths, defaultValue = 'UNKNOWN') => {
   );
 }
 
-const formatRecord = ({ email, firstName, lastName, createdAt, applyReason }) =>
+const formatRecord = ({ email, firstName, lastName, createdAt }) =>
   `Name: ${firstName} ${lastName} \nCreated: ${createdAt} \nEmail: ${email}`;
  
 module.exports.notification = function(dbEvents) {
@@ -33,7 +32,7 @@ module.exports.notification = function(dbEvents) {
     console.log('System created new users with uids:', records.map(({ uid }) => uid).join(', '));
     return SNS.publish({
         Subject: process.env.SUBJECT,
-        Message:  `New user registrations:\n\n${users}`,
+        Message: `New user registrations:\n\n${users}`,
         TopicArn: process.env.TOPIC_ARN
       })
       .promise()
