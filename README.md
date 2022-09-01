@@ -44,8 +44,8 @@ This repository uses Node version 16, pnpm, and serverless.
 
 - Create and/or update the config file for the stage you're deploying.
   ```shell
-  cp configs/example.yml configs/<stage>.yml
-  vi configs/<stage>.yml
+  cp configs/stage.example.yml configs/stage.<stage>.yml
+  vi configs/stage.<stage>.yml
   ```
 
 - Deploy lambda layers, if there are changes or they don't already exist.
