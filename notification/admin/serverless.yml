@@ -1,0 +1,76 @@
+service: "swb-tools-admin-notification"
+
+frameworkVersion: "3"
+
+provider:
+  name: "aws"
+  runtime: "nodejs14.x"
+
+package:
+  patterns:
+    - "!node_modules/**"
+    - "!package.json"
+    - "!template.js"
+    - "!pnpm-lock.yaml"
+    - "!*.test.js"
+    - "!__snapshots__/**"
+
+custom:
+  config: ${file(../../configs/stage.${sls:stage}.yml)}
+  info: ${file(./package.json)}
+  layerLodash: ${file(../../layers/lodash/nodejs/package.json)}
+  topicName: "${self:service}-${sls:stage}-topic"
+  streamArn: "arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:custom.config.userTableName}/stream/${self:custom.config.userTableStream}"
+
+functions:
+  AccountRegistrationNotification:
+    handler: "handler.notification"
+    name: "${self:service}-${sls:stage}"
+    description: ${self:custom.info.description}
+    layers:
+      - "arn:aws:lambda:${aws:region}:${aws:accountId}:layer:${layerName(${self:custom.layerLodash})}-${sls:stage}:1"
+    events:
+      - stream:
+          type: "dynamodb"
+          arn: ${self:custom.streamArn}
+          # To reduce invokations and associated costs, function is invoked when one of the following conditions is met:
+          # The payload size reaches 6MB, the Batch Window reaches its maximum value, or the Batch Size reaches its maximum value.
+          batchSize: 10 # (default: 100, max 1000)
+          batchWindow: 300 # 5 minutes (max: 5mins/300seconds)
+          startingPosition: "LATEST"
+          filterPatterns:
+            - eventName: ["INSERT"]
+              dynamodb:
+                NewImage:
+                  createdBy:
+                    S: ["_system_"]
+    iamRoleStatementsName: "${self:service}-${sls:stage}-lambda"
+    iamRoleStatements:
+      - Effect: "Allow"     
+        Action:
+          - "dynamodb:DescribeStream"
+          - "dynamodb:GetRecords"
+          - "dynamodb:GetShardIterator"
+          - "dynamodb:ListStreams"
+        Resource: "${self:custom.streamArn}"
+      - Effect: "Allow"     
+        Action:
+          - "sns:Publish"
+          - "sns:Subscribe"
+        Resource: !Ref AccountRegistrationTopic
+    environment:
+      REGION: ${aws:region}
+      TOPIC_ARN: "arn:aws:sns:${aws:region}:${aws:accountId}:${self:custom.topicName}"
+      SUBJECT: ${self:custom.config.registrationSubject}
+
+resources:
+  Resources:
+    AccountRegistrationTopic:
+        Type: "AWS::SNS::Topic"
+        Properties:
+          DisplayName: "SWB account user registration notification to admins."
+          TopicName: "${self:custom.topicName}"
+
+plugins:
+  - "serverless-iam-roles-per-function"
+  - ../../layers/layerNamePlugin

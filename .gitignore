@@ -9,5 +9,5 @@ jspm_packages
 **/.serverless
 
 # config files
-config.*.yml
-!config.example.yml
+configs/stage.*.yml
+!configs/stage.example.yml

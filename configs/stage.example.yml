@@ -1,0 +1,11 @@
+region: us-east-1
+userTableName: a-table-name
+userTableStream: '2022-07-21T18:05:23.830'
+
+# User Notification
+fromEmail: some@email.com
+fromName: AIM-AHEAD
+emailTemplateName: userActivationTemplate
+
+# Admin Notification
+registrationSubject: 'AIM-AHEAD - SWB User Registrations are Pending'

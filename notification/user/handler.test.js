@@ -84,7 +84,7 @@ describe('activation', () => {
     const testRecords = { Records: [ user_error ]};
     sendEmailMock.mockRejectedValueOnce(new Error('Some error'));
     const response = await activation(testRecords);
-    expect(response.statusCode).toMatchSnapshot();
+    expect(response.statusCode).toEqual(200);
   });
   afterEach(() => {
     jest.clearAllMocks();

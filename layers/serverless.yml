@@ -8,18 +8,17 @@ provider:
   region: "us-east-1"
 
 custom:
-  lodash: "${file(./lodash/nodejs/package.json)}"
+  lodash: ${file(./lodash/nodejs/package.json)}
   scriptable:
     hooks:
-      before:package:createDeploymentArtifacts: "pnpm -r install"
+      before:package:createDeploymentArtifacts: "pnpm build-layers"
 
 layers:
   Lodash:
     path: "lodash"
-    name: "${self:custom.lodash.name}-${sls:stage}"
-
-resources:
-  Description: "${self:custom.lodash.description}"
+    description: ${self:custom.lodash.description}
+    name: "${layerName(${self:custom.lodash})}-${sls:stage}"
 
 plugins:
   - "serverless-scriptable-plugin"
+  - ./layerNamePlugin
