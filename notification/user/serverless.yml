@@ -69,7 +69,7 @@ functions:
 
 resources:
   Resources:
-    ActivationNotificationTemplate:
+    UserNotificationTemplate:
       Type: "AWS::SES::Template"
       Properties: 
         Template: 
