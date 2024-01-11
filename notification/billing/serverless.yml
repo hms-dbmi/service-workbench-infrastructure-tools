@@ -1,0 +1,60 @@
+service: "swb-tools-billing-notification"
+
+frameworkVersion: "3"
+
+provider:
+  name: "aws"
+  runtime: "nodejs14.x"
+
+package:
+  patterns:
+    - "!node_modules/**"
+    - "!package.json"
+    - "!template.js"
+    - "!pnpm-lock.yaml"
+    - "!*.test.js"
+    - "!__snapshots__/**"
+
+custom:
+  config: ${file(../../configs/stage.${sls:stage}.yml)}
+  info: ${file(./package.json)}
+  topicName: "${self:service}-${sls:stage}-topic"
+  streamArn: "arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:custom.config.userTableName}/stream/${self:custom.config.userTableStream}"
+
+functions:
+  BillingNotification:
+    handler: "handler.billingNotification"
+    name: "${self:service}-${sls:stage}"
+    description: ${self:custom.info.description}
+    events:
+      - schedule:
+          rate: rate(1 day)
+          enabled: true
+    iamRoleStatementsName: "${self:service}-${sls:stage}-lambda"
+    iamRoleStatements:
+      - Effect: "Allow"     
+        Action:
+          - "ce:GetCostAndUsage"
+        Resource: "*"
+      - Effect: "Allow"     
+        Action:
+          - "sns:Publish"
+          - "sns:Subscribe"
+        Resource: !Ref AccountRegistrationTopic
+    environment:
+      REGION: ${aws:region}
+      PROJECT: ${self:custom.config.costProject}
+      THRESHOLD: ${self:custom.config.costThreshold}
+      ENVIRONMENT: ${self:custom.config.costEnv}
+      TOPIC_ARN: "arn:aws:sns:${aws:region}:${aws:accountId}:${self:custom.topicName}"
+
+resources:
+  Resources:
+    AccountRegistrationTopic:
+        Type: "AWS::SNS::Topic"
+        Properties:
+          DisplayName: "SWB billing notification to admins on user excess threshold."
+          TopicName: "${self:custom.topicName}"
+
+plugins:
+  - "serverless-iam-roles-per-function"
