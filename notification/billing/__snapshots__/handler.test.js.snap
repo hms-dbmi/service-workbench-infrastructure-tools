@@ -1,0 +1,23 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`billingNotification should attempt to publish to topic with correct parameters 1`] = `
+Object {
+  "Message": "Below users are over the $1.00 threshold for 'dev' project:
+
+user-1 - $2.04
+  - d7d0a71c-41b4-4e13-89e2-cb05d2fc2559 - $1.98
+  - 2133912f-f276-4f6a-a1d3-90d41f3387f6 - $0.06
+
+user-2 - $1.64
+  - 11e7843d-d7ea-48ea-8094-639d033352cc - $0.80
+  - 92c09776-cca9-4bef-94fe-e5a994f78656 - $0.55
+  - 0c990b57-c94d-40a2-8c8d-7d4d67a0a0ed - $0.19
+  - 8f89e668-96dd-4e43-949f-1f30db21c9dd - $0.10
+
+user-6 - $1.26
+  - e35741d3-eeb0-42f8-bf69-3f2534a1208e - $1.05
+  - 36389203-9365-41cd-aa90-8c0cb7e85922 - $0.20",
+  "Subject": "Dev SWB - Billing Notice",
+  "TopicArn": "arn:aws:sns:us-east-1:000000000:swb-tools-billing-notification-dev-topic",
+}
+`;

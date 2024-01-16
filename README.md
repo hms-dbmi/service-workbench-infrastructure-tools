@@ -11,14 +11,17 @@ AWS lambda functions designed to extend SWB functionality.
   - path: `notification/admin`
   - lambda name: `swb-tools-admin-notification-<stage>`
   - requires: lodash layer
+- [Notification when a user's cost exceeds given threshold, via SNS](notification/billing)
+  - path: `notification/billing`
+  - lambda name: `swb-tools-billing-notification-<stage>`
 
 # Install
 This repository uses Node version 16, pnpm, and serverless.
 
 
-- Setup node version 16 using nvm and update npm. ***Optional***
+- Setup node version 18 using nvm and update npm. ***Optional***
   ```shell
-  nvm install 16
+  nvm install 18
   npm install -g npm@latest
   ```
 

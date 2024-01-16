@@ -9,3 +9,8 @@ emailTemplateName: userActivationTemplate
 
 # Admin Notification
 registrationSubject: 'AIM-AHEAD - SWB User Registrations are Pending'
+
+# Billing Notification
+costEnv: 'AIM-Ahead (Dev)' # Pretty env name -- used in SNS email subject
+costProject: bch-host
+costThreshold: 1000
