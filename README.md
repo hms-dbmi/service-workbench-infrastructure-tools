@@ -19,9 +19,9 @@ AWS lambda functions designed to extend SWB functionality.
 This repository uses Node version 16, pnpm, and serverless.
 
 
-- Setup node version 16 using nvm and update npm. ***Optional***
+- Setup node version 18 using nvm and update npm. ***Optional***
   ```shell
-  nvm install 16
+  nvm install 18
   npm install -g npm@latest
   ```
 
