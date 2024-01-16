@@ -1,55 +1,49 @@
-const AWS = require('aws-sdk');
+const { mockClient } = require('aws-sdk-client-mock');
+const { CostExplorer, GetCostAndUsageCommand } = require('@aws-sdk/client-cost-explorer');
+const { SNS, PublishCommand } = require('@aws-sdk/client-sns');
+
 const { billingNotification } = require('./handler');
 const { byUser, byEnv, none } = require('./handler.test.data');
-jest.mock("aws-sdk");
-
-const logger = {};
 
 process.env.PROJECT = 'dev';
 process.env.TOPIC_ARN = 'arn:aws:sns:us-east-1:000000000:swb-tools-billing-notification-dev-topic';
 process.env.THRESHOLD = 1;
 process.env.ENVIRONMENT = 'Dev';
 
-const publishMock = jest.fn();
-AWS.SNS.prototype.publish = jest.fn().mockImplementation(params => ({
-  promise: () => publishMock(params)
-}));
-
-const getCostAndUsageMock = jest.fn();
-AWS.CostExplorer.prototype.getCostAndUsage = jest.fn().mockImplementation(params => ({
-  promise: () => getCostAndUsageMock(params)
-}));
+const logger = {};
+const snsMock = mockClient(SNS);
+const ceMock = mockClient(CostExplorer);
 
 describe('billingNotification', () => {
   beforeEach(() => {
     // capture and print nothing
     logger.info = jest.spyOn(console, "log").mockImplementation(() => { });
     logger.error = jest.spyOn(console, "error").mockImplementation(() => { });
+    snsMock.reset();
+    ceMock.reset();
   });
   it('should return status 200 on success', async () => {
-    getCostAndUsageMock.mockResolvedValueOnce(none);
+    ceMock.on(GetCostAndUsageCommand).resolves(none);
     const response = await billingNotification();
     expect(response.statusCode).toEqual(200);
   });
   it('should return status 500 on cost explorer error', async () => {
-    getCostAndUsageMock.mockRejectedValueOnce(new Error('Some SNS topic publishing error'));
+    ceMock.on(GetCostAndUsageCommand).rejects('Some cost explorer error');
     const response = await billingNotification();
     expect(response.statusCode).toEqual(500);
   });
   it('should return status 500 on sns topic publish error', async () => {
-    publishMock.mockRejectedValueOnce(new Error('Some SNS topic publishing error'));
+    snsMock.on(PublishCommand).rejects('Some SNS topic publishing emrror');
     const response = await billingNotification();
     expect(response.statusCode).toEqual(500);
   });
   it('should attempt to publish to topic with correct parameters', async () => {
-    getCostAndUsageMock.mockResolvedValueOnce(byUser);
-    getCostAndUsageMock.mockResolvedValueOnce(byEnv['user-1']);
-    getCostAndUsageMock.mockResolvedValueOnce(byEnv['user-2']);
-    getCostAndUsageMock.mockResolvedValueOnce(byEnv['user-6']);
+    ceMock.on(GetCostAndUsageCommand)
+      .resolvesOnce(byUser)
+      .resolvesOnce(byEnv['user-1'])
+      .resolvesOnce(byEnv['user-2'])
+      .resolvesOnce(byEnv['user-6']);
     await billingNotification();
-    expect(publishMock.mock.calls).toMatchSnapshot();
-  });
-  afterEach(() => {
-    jest.clearAllMocks();
+    expect(snsMock.call(0).args[0].input).toMatchSnapshot();
   });
 });

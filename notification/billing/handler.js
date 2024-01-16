@@ -1,10 +1,9 @@
 'use strict';
-const AWS = require('aws-sdk');
+const { CostExplorer: costExplorerClient } = require('@aws-sdk/client-cost-explorer');
+const { SNS: snsClient } = require('@aws-sdk/client-sns');
 
-AWS.config.update({ region: process.env.REGION || 'us-east-1' });
-
-const SNS = new AWS.SNS({ apiVersion: '2010-12-01' });
-const CE = new AWS.CostExplorer({ apiVersion: '2017-10-25' });
+const SNS = new snsClient({ region: process.env.REGION || 'us-east-1'});
+const CE = new costExplorerClient({ region: process.env.REGION || 'us-east-1' });
 const Dollar = new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' });
 
 const dimensions = {
@@ -47,8 +46,7 @@ function sendNotification(subject, message) {
     Subject: subject,
     Message: message,
     TopicArn: process.env.TOPIC_ARN
-  })
-    .promise();
+  });
 }
 
 function getUsersAboveThreshold(start, end) {
@@ -59,7 +57,6 @@ function getUsersAboveThreshold(start, end) {
     },
     ...dimensions.byUser
   })
-    .promise()
     .then(result => {
       const byUser = result.ResultsByTime.reduce((users, item) => {
         item.Groups.forEach(group => {
@@ -84,7 +81,6 @@ function getEnvsForUser(start, end, user) {
     },
     ...dimensions.byEnv(user)
   })
-    .promise()
     .then(result => {
       const byEnv = result.ResultsByTime.reduce((envs, item) => {
         item.Groups.forEach(group => {
