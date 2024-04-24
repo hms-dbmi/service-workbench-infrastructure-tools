@@ -76,3 +76,4 @@ resources:
 plugins:
   - "serverless-iam-roles-per-function"
   - ../../layers/layerNamePlugin
+  - serverless-deployment-bucket
