@@ -10,6 +10,12 @@ const eventPaths = {
   email: 'dynamodb.NewImage.email.S',
   firstName: 'dynamodb.NewImage.firstName.S',
   lastName: 'dynamodb.NewImage.lastName.S',
+  affiliation: 'dynamodb.NewImage.aaAffiliation.S',
+  piName: 'dynamodb.NewImage.piName.S',
+  projectName: 'dynamodb.NewImage.projectName.S',
+  aaProjectName: 'dynamodb.NewImage.aaProjectName.S',
+  aaProjectId: 'dynamodb.NewImage.aaProjectId.S',
+  dataSources: 'dynamodb.NewImage.dataSources.SS',
   createdAt: 'dynamodb.NewImage.createdAt.S'
 };
 
@@ -22,8 +28,8 @@ const mapEventPaths = (paths, defaultValue = 'UNKNOWN') => {
   );
 }
 
-const formatRecord = ({ email, firstName, lastName, createdAt }) =>
-  `Name: ${firstName} ${lastName} \nCreated: ${createdAt} \nEmail: ${email}`;
+const formatRecord = ({ email, firstName, lastName, affiliation, piName, projectName, createdAt }) =>
+  `Name: ${firstName} ${lastName} \nCreated: ${createdAt} \nEmail: ${email} \nAffiliation: ${affiliation} \nPI Name: ${piName} \nProject Name: ${projectName} \nAA Project Name: ${aaProjectName} \nAA Project ID: ${aaProjectId} \nData Sources: ${dataSources.join(', ')}`;
  
 module.exports.notification = function(dbEvents) {
     const records = dbEvents.Records.map(mapEventPaths(eventPaths));
