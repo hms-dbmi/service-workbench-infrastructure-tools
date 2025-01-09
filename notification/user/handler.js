@@ -10,6 +10,11 @@ const eventPaths = {
   firstName: 'dynamodb.NewImage.firstName.S',
   lastName: 'dynamodb.NewImage.lastName.S',
   email: 'dynamodb.NewImage.email.S',
+  aaAffiliation: 'dynamodb.NewImage.aaAffiliation.S',
+  aaProjectId: 'dynamodb.NewImage.aaProjectId.S',
+  aaProjectName: 'dynamodb.NewImage.aaProjectName.S',
+  piName: 'dynamodb.NewImage.piName.S',
+  dataSources: 'dynamodb.NewImage.dataSources.SS',
   updatedAt: 'dynamodb.NewImage.updatedAt.S',
   updatedBy: 'dynamodb.NewImage.updatedBy.S'
 }
