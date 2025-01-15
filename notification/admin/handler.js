@@ -10,22 +10,31 @@ const eventPaths = {
   email: 'dynamodb.NewImage.email.S',
   firstName: 'dynamodb.NewImage.firstName.S',
   lastName: 'dynamodb.NewImage.lastName.S',
+  affiliation: 'dynamodb.NewImage.aaAffiliation.S',
+  piName: 'dynamodb.NewImage.piName.S',
+  aaProjectName: 'dynamodb.NewImage.aaProjectName.S',
+  dataSources: 'dynamodb.NewImage.dataSources.L',
   createdAt: 'dynamodb.NewImage.createdAt.S'
 };
 
 // Return mapped path values
 const mapEventPaths = (paths, defaultValue = 'UNKNOWN') => {
   const pathEntries = Object.entries(paths);
-  return record => pathEntries.reduce((acc, [ key, path ]) => 
-    ({ ...acc, [key]: get(record, path, defaultValue) }),
-    {}
-  );
+  return record => pathEntries.reduce((acc, [ key, path ]) => {
+    let value = get(record, path, defaultValue);
+    // Handle dataSources List structure
+    if (key === 'dataSources' && Array.isArray(value)) {
+      value = value.map(item => item.S);
+    }
+    return { ...acc, [key]: value };
+  }, {});
 }
 
-const formatRecord = ({ email, firstName, lastName, createdAt }) =>
-  `Name: ${firstName} ${lastName} \nCreated: ${createdAt} \nEmail: ${email}`;
+const formatRecord = ({ email, firstName, lastName, affiliation, piName, aaProjectName, dataSources, createdAt }) =>
+  `Name: ${firstName} ${lastName} \nCreated: ${createdAt} \nEmail: ${email} \nAffiliation: ${affiliation} \nPI Name: ${piName}\nAA Project Name: ${aaProjectName}\nData Sources: ${dataSources.length ? dataSources.join(', ') : 'None'}`;
  
 module.exports.notification = function(dbEvents) {
+    console.log('Received event:', JSON.stringify(dbEvents, null, 2));
     const records = dbEvents.Records.map(mapEventPaths(eventPaths));
     const users = records.map(formatRecord).join('\n\n');
     
