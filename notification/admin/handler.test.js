@@ -9,7 +9,7 @@ AWS.SNS.prototype.publish = jest.fn().mockImplementation(params => ({
 
 const logger = {};
 
-const testRecord = (uid, first, last, email, createdAt, affiliation = 'Test Uni', piName = 'Dr. Test', aaProjectName = 'Project X') => ({
+const testRecord = (uid, first, last, email, affiliation = 'Test Uni', piName = 'Dr. Test', aaProjectName = 'Project X', createdAt) => ({
   dynamodb: {
     NewImage: {
       uid: { S: uid },
@@ -34,8 +34,8 @@ process.env.TOPIC_ARN = 'arn:aws:sns:us-east-1:<account>:<topic>';
 process.env.SUBJECT = 'Some SNS event subject';
  
 describe('notification', () => {
-  const user_1 = testRecord('123', 'test', 'tester', 'test@example.com', 'friday', 'University A', 'Dr. Smith', 'Research X');
-  const user_2 = testRecord('234', 'mock', 'mocker', 'mock@example.com', 'thursday', 'University B', 'Dr. Jones', 'Research Y');
+  const user_1 = testRecord('123', 'test', 'tester', 'test@example.com','University A', 'Dr. Smith', 'Research X', 'friday', );
+  const user_2 = testRecord('234', 'mock', 'mocker', 'mock@example.com', 'University B', 'Dr. Jones', 'Research Y', 'thursday');
   const records = { Records: [ user_1, user_2 ]};
 
   beforeEach(() => {
