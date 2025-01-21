@@ -12,6 +12,8 @@ custom:
   scriptable:
     hooks:
       before:package:createDeploymentArtifacts: "pnpm build-layers"
+  deploymentBucket:
+    blockPublicAccess: true
 
 layers:
   Lodash:

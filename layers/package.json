@@ -6,8 +6,9 @@
     "build-layers": "npm-recursive-install --skip-root --omit=dev"
   },
   "devDependencies": {
+    "recursive-install": "^1.4.0",
     "serverless": "^3.22.0",
-    "serverless-scriptable-plugin": "^1.2.2",
-    "recursive-install": "^1.4.0"
+    "serverless-deployment-bucket": "^1.6.0",
+    "serverless-scriptable-plugin": "^1.2.2"
   }
 }

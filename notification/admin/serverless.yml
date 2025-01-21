@@ -21,6 +21,8 @@ custom:
   layerLodash: ${file(../../layers/lodash/nodejs/package.json)}
   topicName: "${self:service}-${sls:stage}-topic"
   streamArn: "arn:aws:dynamodb:${aws:region}:${aws:accountId}:table/${self:custom.config.userTableName}/stream/${self:custom.config.userTableStream}"
+  deploymentBucket:
+    blockPublicAccess: true
 
 functions:
   AccountRegistrationNotification:
@@ -74,3 +76,4 @@ resources:
 plugins:
   - "serverless-iam-roles-per-function"
   - ../../layers/layerNamePlugin
+  - serverless-deployment-bucket
